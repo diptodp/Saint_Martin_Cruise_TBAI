@@ -1,6 +1,17 @@
 import { Analytics } from '@vercel/analytics/next'
+import { Bricolage_Grotesque, Playfair_Display } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+
+const bricolageGrotesque = Bricolage_Grotesque({
+  subsets: ['latin'],
+  variable: '--font-bricolage',
+})
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+})
 
 export const metadata: Metadata = {
   title: 'Bluewater | Cruise Booking Request',
@@ -36,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${bricolageGrotesque.variable} ${playfairDisplay.variable}`}>
       <body className="antialiased" suppressHydrationWarning>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
