@@ -58,6 +58,10 @@ button { cursor: pointer; }
 .radio-indicator.checked::after { content: ''; position: absolute; inset: 5px; border-radius: 999px; background: #164bd3; }
 .field { display: flex; flex-direction: column; gap: 8px; color: #526177; font-size: 12px; font-weight: 700; }
 .field input, .field select { width: 100%; border: 1px solid #dfe6f0; border-radius: 12px; background: #fbfcfe; padding: 12px 13px; color: #172033; outline: none; transition: border-color .2s, box-shadow .2s; }
+.passenger .date-field { gap: 8px; }
+.passenger .date-field .modern-date-trigger { height: 44px; min-height: 0; max-height: 44px; border-radius: 12px; padding: 0 13px; line-height: 1.2; }
+.passenger .date-field .modern-date-trigger b { font-size: 14px; font-weight: 600; }
+.passenger .date-field .modern-date-trigger small, .passenger .date-field > small { display: none; }
  .field input:focus, .field select:focus { border-color: #0d61ff; box-shadow: 0 0 0 3px rgba(13,97,255,.1); }
  .field small { color: #8995a8; font-size: 11px; font-weight: 500; }
  .date-input-wrap { position: relative; }
@@ -90,6 +94,10 @@ button { cursor: pointer; }
  .month-dropdown-option input:checked + .month-radio { border-color: #0d61ff; box-shadow: inset 0 0 0 4px #fff; background: #0d61ff; }
  .calendar-top, .calendar-weekdays, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); align-items: center; gap: 4px; }
  .calendar-top { grid-template-columns: 34px 1fr 34px; margin-bottom: 14px; text-align: center; color: #16213a; }
+ .calendar-month-year { display: flex; min-width: 0; justify-content: center; gap: 4px; }
+ .calendar-month-year select { min-width: 0; border: 0; border-radius: 8px; background: #f0f5ff; padding: 7px 4px; color: #16213a; font-size: 11px; font-weight: 800; }
+ .calendar-month-year select:first-child { width: 92px; }
+ .calendar-month-year select:last-child { width: 58px; }
  .calendar-top button { display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 10px; background: #f0f5ff; color: #0d61ff; }
  .calendar-weekdays { margin-bottom: 6px; color: #9aa7bc; font-size: 10px; font-weight: 800; text-align: center; text-transform: uppercase; }
  .calendar-grid button { height: 34px; border: 0; border-radius: 10px; background: transparent; color: #344159; font-size: 12px; }
