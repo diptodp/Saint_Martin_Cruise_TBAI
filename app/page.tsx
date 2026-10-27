@@ -88,7 +88,7 @@ function HeroBanner() {
 }
 
 function BookingStepper({ currentStep }: { currentStep: 1 | 2 | 3 }) {
-  const steps = ['Choose your cruise', 'Book your journey', 'Review and confirm']
+  const steps = ['Choose your ship', 'Book your journey', 'Review and confirm']
   return <nav className="booking-stepper" aria-label="Booking progress"><ol>{steps.map((label, index) => { const step = index + 1; const complete = step < currentStep; const active = step === currentStep; return <li key={label} className={`${active ? 'active' : ''} ${complete ? 'complete' : ''}`} aria-current={active ? 'step' : undefined}><span className="booking-step-item"><span className="booking-step-circle">{complete ? <Check size={24} aria-label="Completed" /> : `0${step}`}</span><span className="booking-step-label">{label}</span></span>{step < steps.length && <span className={`booking-step-connector ${complete ? 'complete' : ''}`} aria-hidden="true" />}</li> })}</ol></nav>
 }
 
@@ -135,7 +135,7 @@ function ShipCard({ ship, selected, onSelect, onDetails, onSchedule }: { ship: S
 function ShipSelection({ ships, selectedShipId, onSelect, onDetails, onSchedule, onContinue }: { ships: Ship[]; selectedShipId: string | null; onSelect: (id: string) => void; onDetails: (ship: Ship, trigger: HTMLElement) => void; onSchedule: (ship: Ship, trigger: HTMLElement) => void; onContinue: () => void }) {
   return <>
     <section className="ship-selection" aria-labelledby="ship-selection-title">
-    <div className="ship-selection-heading"><div><p className="eyebrow">01 / Choose your vessel</p><h2 id="ship-selection-title">Choose your cruise.</h2><p>Select the ship that suits your trip to Saint Martin&apos;s Island.</p></div></div>
+    <div className="ship-selection-heading"><div><p className="eyebrow">01 / Choose your vessel</p><h2 id="ship-selection-title">Choose your ship.</h2><p>Select the ship that suits your trip to Saint Martin&apos;s Island.</p></div></div>
     <div className="ship-grid">{ships.map((ship) => <ShipCard key={ship.id} ship={ship} selected={selectedShipId === ship.id} onSelect={() => onSelect(ship.id)} onDetails={onDetails} onSchedule={onSchedule} />)}</div>
     <div className="ship-selection-footer"><button type="button" disabled={!selectedShipId} onClick={onContinue} className="primary-button">Continue with selected ship <ArrowRight size={20} aria-hidden="true" /></button><p>Need more information? <button type="button" onClick={(event) => { const selected = ships.find((ship) => ship.id === selectedShipId) ?? ships[0]; onDetails(selected, event.currentTarget) }}>Explore ship details</button></p></div>
     </section>
