@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Fragment, type ReactNode } from 'react'
-import { ArrowRight, Armchair, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock3, CreditCard, Download, Headset, Info, MapPin, Minus, Plus, Ship, ShieldCheck, Ticket, Trash2, UserRound } from 'lucide-react'
+import { Fragment, type CSSProperties, type ReactNode } from 'react'
+import { ArrowRight, Armchair, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock3, Copy, CreditCard, Download, Headset, Info, MapPin, Minus, Plus, Ship, ShieldCheck, Ticket, Trash2, UserRound } from 'lucide-react'
 import { jsPDF } from 'jspdf'
 import { ShipDetailsModal, type ShipDetailsData } from '@/components/ShipDetailsModal'
 
@@ -86,8 +86,66 @@ function TrustSection() {
   return <section className="trust-section" aria-label="Booking benefits"><ul>{trustItems.map((item) => <TrustItem key={item.title} item={item} />)}</ul></section>
 }
 
+type Voucher = {
+  id: string
+  title: string
+  discount: number
+  code: string
+  validTill?: string
+  image: string
+  leftBg: string
+  ctaLabel: string
+  ctaHref: string
+}
+
+const vouchers: Voucher[] = [{
+  id: 'saint-martin-resort',
+  title: 'Resort Voucher',
+  discount: 15,
+  code: 'TBSHIP15',
+  validTill: '2026-12-31',
+  image: '/placeholder.jpg',
+  leftBg: '#F1F0FD',
+  ctaLabel: 'Book now',
+  ctaHref: '/resorts/saint-martin',
+}]
+
+function VoucherCard({ voucher }: { voucher: Voucher }) {
+  const [copyMessage, setCopyMessage] = useState('Copy code')
+  async function copyCode() {
+    try {
+      await navigator.clipboard.writeText(voucher.code)
+      setCopyMessage('Copied')
+      window.setTimeout(() => setCopyMessage('Copy code'), 1500)
+    } catch {
+      setCopyMessage('Copy unavailable')
+      window.setTimeout(() => setCopyMessage('Copy code'), 1500)
+    }
+  }
+
+  const href = `${voucher.ctaHref}?voucher=${encodeURIComponent(voucher.code)}`
+  return <article className="voucher-card" style={{ '--voucher-left-bg': voucher.leftBg, '--voucher-image': `url(${voucher.image})` } as CSSProperties & Record<'--voucher-left-bg' | '--voucher-image', string>}>
+    <div className="voucher-left">
+      <span className="voucher-decoration voucher-decoration-one" aria-hidden="true" />
+      <span className="voucher-decoration voucher-decoration-two" aria-hidden="true" />
+      <span className="voucher-decoration voucher-decoration-sparkle" aria-hidden="true">✦</span>
+      <h3>{voucher.title}</h3>
+      <p className="voucher-supporting-text">Special discount on Saint Martin resort booking</p>
+      <div className="voucher-code-row"><span>Code : {voucher.code}</span><button type="button" className="voucher-copy" onClick={copyCode} aria-label={`Copy voucher code ${voucher.code}`}><Copy size={14} aria-hidden="true" /><span className={`voucher-tooltip${copyMessage !== 'Copy code' ? ' is-visible' : ''}`} role="status">{copyMessage}</span></button></div>
+      <a className="primary-button voucher-book-button" href={href}>{voucher.ctaLabel} <ArrowRight size={15} aria-hidden="true" /></a>
+    </div>
+    <div className="voucher-sand" aria-hidden="true" />
+    <div className="voucher-right"><span>Discount</span><strong>{voucher.discount}%</strong></div>
+    <div className="voucher-tear-line" aria-hidden="true" />
+  </article>
+}
+
+function ExclusiveOffers() {
+  return <section className="exclusive-offers" aria-labelledby="offer-heading"><h2 id="offer-heading">Exclusive offer</h2><p className="exclusive-offers-description">Get special discount on resort booking at Saint Martin as you are booking the cruise ticket from TripBooking AI.</p><div className="exclusive-offers-grid">{vouchers.map((voucher) => <VoucherCard key={voucher.id} voucher={voucher} />)}</div></section>
+}
+
 function HeroBanner() {
-  return <header className="cruise-hero"><div className="cruise-hero-content"><p className="cruise-hero-eyebrow">SAINT MARTIN&apos;S ISLAND CRUISES</p><h1>Make room for<br /><span>the sea!</span></h1><p className="cruise-hero-description">Sail from Cox&apos;s Bazar to Saint Martin&apos;s Island with comfortable cruise ships, easy booking and a memorable island escape.</p><div className="hero-info-chips"><InfoChip icon={<Ship size={28} aria-hidden="true" />}>2 Cruise Ships</InfoChip><InfoChip icon={<CalendarDays size={28} aria-hidden="true" />}>Scheduled Sailings</InfoChip><InfoChip icon={<Ticket size={28} aria-hidden="true" />} className="hero-fare-chip"><span><small>Tickets from</small><strong>{money(lowestStartingPrice)}</strong></span></InfoChip></div></div><div className="hero-location"><MapPin size={22} aria-hidden="true" />Saint Martin&apos;s Island</div><div className="cruise-hero-bottom-fade" aria-hidden="true" /></header>
+  return <header className="cruise-hero"><div className="cruise-hero-inner"><div className="cruise-hero-header"><a className="hero-logo" href="/" aria-label="Bluewater home"><img src="/Logo.png" alt="Bluewater" /></a></div><div className="cruise-hero-content"><p className="cruise-hero-eyebrow">SAINT MARTIN&apos;S ISLAND CRUISES</p><h1>Make room for<br /><span>the sea!</span></h1><p className="cruise-hero-description">Sail from Cox&apos;s Bazar to Saint Martin&apos;s Island with comfortable cruise ships, easy booking and a memorable island escape.</p><div className="hero-info-chips"><InfoChip icon={<Ship size={28} aria-hidden="true" />}>2 Cruise Ships</InfoChip><InfoChip icon={<CalendarDays size={28} aria-hidden="true" />}>Scheduled Sailings</InfoChip><InfoChip icon={<Ticket size={28} aria-hidden="true" />} className="hero-fare-chip"><span><small>Tickets from</small><strong>{money(lowestStartingPrice)}</strong></span></InfoChip></div></div></div><div className="hero-location"><MapPin size={22} aria-hidden="true" />Saint Martin&apos;s Island</div><div className="cruise-hero-bottom-fade" aria-hidden="true" /></header>
 }
 
 function BookingStepper({ currentStep, shipRoute }: { currentStep: 1 | 2 | 3; shipRoute?: boolean }) {
@@ -194,7 +252,7 @@ export function BookingPage({ initialShipSlug }: { initialShipSlug?: string }) {
   async function downloadSummary() { const pdfMoney = (value: number) => `BDT ${value.toLocaleString('en-IN')}`; const pdf = new jsPDF({ unit: 'pt', format: 'a4', compress: true }); const logo = new Image(); logo.src = '/tripbooking-logo.png'; await new Promise<void>((resolve) => { logo.onload = () => resolve(); logo.onerror = () => resolve() }); const logoData = logo.complete && logo.naturalWidth ? (() => { const canvas = document.createElement('canvas'); const maxWidth = 900; const scale = Math.min(1, maxWidth / logo.naturalWidth); canvas.width = Math.max(1, Math.round(logo.naturalWidth * scale)); canvas.height = Math.max(1, Math.round(logo.naturalHeight * scale)); const context = canvas.getContext('2d'); if (context) { context.fillStyle = '#F6F8FF'; context.fillRect(0, 0, canvas.width, canvas.height); context.drawImage(logo, 0, 0, canvas.width, canvas.height) } return canvas.toDataURL('image/jpeg', 0.72) })() : null; const pageWidth = pdf.internal.pageSize.getWidth(); const navy = [24, 52, 93] as const; const blue = [21, 87, 214] as const; pdf.setFillColor(245, 248, 255); pdf.rect(0, 0, pageWidth, 842, 'F'); if (logoData) pdf.addImage(logoData, 'JPEG', 56, 8, 128, 36, undefined, 'FAST'); pdf.setFillColor(...blue); pdf.roundedRect(40, 58, pageWidth - 80, 92, 18, 18, 'F'); pdf.setTextColor(255, 255, 255); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(25); pdf.text('Booking Summary', 64, 106); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(11); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(10); pdf.text(`Booking ID: ${bookingId}`, pageWidth - 56, 134, { align: 'right' }); pdf.text('Cruise booking request', 64, 118); let y = 194; pdf.setTextColor(...navy); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(14); pdf.text('Journey details', 48, y); y += 24; pdf.setFillColor(255, 255, 255); pdf.roundedRect(48, y, pageWidth - 96, 112, 12, 12, 'F'); pdf.setTextColor(92, 113, 144); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(10); pdf.text('SHIP', 66, y + 25); pdf.text('TRAVEL PERIOD', 66, y + 58); pdf.text('DEPARTURE', 66, y + 91); pdf.setTextColor(...navy); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(12); pdf.text(ship.name, 205, y + 25); pdf.text(periods.find((item) => item.value === period)?.label ?? '', 205, y + 58); pdf.text(departureDate || 'Not selected', 205, y + 91); if (returnDate) { pdf.setTextColor(92, 113, 144); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(10); pdf.text('RETURN', 340, y + 91); pdf.setTextColor(...navy); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(12); pdf.text(returnDate, 395, y + 91) } y += 148; pdf.setTextColor(...navy); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(14); pdf.text(`Passengers (${passengers.length})`, 48, y); y += 22; passengers.forEach((person, index) => { if (y > 730) { pdf.addPage(); y = 48 } pdf.setFillColor(255, 255, 255); pdf.roundedRect(48, y, pageWidth - 96, 58, 10, 10, 'F'); pdf.setTextColor(...navy); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(11); pdf.text(`${index + 1}. ${person.name || 'Passenger'}`, 64, y + 22); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9); pdf.setTextColor(92, 113, 144); pdf.text(`DOB: ${person.dob || '—'}   NID: ${person.nid || '—'}   Seat: ${ship.rooms.find((room) => room.id === person.roomTypeId)?.name ?? '—'}`, 64, y + 41); y += 68 }); y += 8; pdf.setFillColor(...blue); pdf.roundedRect(48, y, pageWidth - 96, 64, 12, 12, 'F'); pdf.setTextColor(219, 232, 255); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(11); pdf.text('ESTIMATED TOTAL', 68, y + 25); pdf.setTextColor(255, 255, 255); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(21); pdf.text(pdfMoney(total), 68, y + 49); pdf.save('booking-summary.pdf') }
   function submit(event: React.FormEvent) { event.preventDefault(); const incomplete = passengers.some((person) => !person.name.trim() || !person.nid || !person.dob); const invalidContact = !contactInformation.email.includes('@') || !contactInformation.phone.trim() || !contactInformation.whatsapp.trim() || !/^(?:\+880|880|0)1[3-9][0-9]{8}$/.test(contactInformation.phone); if (!departureDate || !returnDate || incomplete || invalidContact || !terms || !schedules.length) { setErrors(!departureDate || !returnDate ? 'Please select your departure and return dates.' : !terms ? 'Please accept the Terms and Conditions to continue.' : 'Please complete the highlighted journey and contact information.'); return } setErrors(''); setSubmitted(true) }
 
-  if (submitted) return <main className="min-h-screen bg-[#f5f8ff] px-5 py-10 text-[#101828]"><div className="mx-auto max-w-7xl px-5 pb-8 sm:px-10 lg:px-16"><div className="flex items-center justify-between gap-3 text-sm font-bold text-[#8b9ab2]"><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">1</span><span className="hidden sm:inline">Choose cruise</span></div><div className="h-px flex-1 bg-[#1464ff]" /><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">2</span><span className="hidden sm:inline">Booking your journey</span></div><div className="h-px flex-1 bg-[#1464ff]" /><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">3</span><span className="hidden sm:inline">Confirm booking</span></div></div></div><div className="mx-auto flex min-h-[70vh] max-w-3xl items-center justify-center"><section className="w-full rounded-[32px] bg-white p-8 text-center shadow-[0_24px_80px_rgba(13,97,255,.12)] sm:p-16"><div className="mx-auto mb-7 flex size-20 items-center justify-center rounded-full bg-[#e7f0ff] text-[#0d61ff]"><Check size={36} /></div><p className="mb-3 text-sm font-bold uppercase tracking-[.18em] text-[#0d61ff]">03 / Confirm booking</p><h1 className="mb-4 text-4xl font-semibold tracking-[-.04em]">Your journey is on its way.</h1><p className="mx-auto max-w-md leading-7 text-slate-500">Your booking request has been received successfully. Our team will contact you as soon as possible to confirm availability and complete your booking.</p><div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row"><button className="primary-button" onClick={() => setSubmitted(false)}>Back to booking</button><button type="button" className="summary-download confirmation-download" onClick={downloadSummary}><Download size={16} /> Download booking summary PDF</button></div>  </section></div></main>
+  if (submitted) return <main className="min-h-screen bg-[#f5f8ff] px-5 py-10 text-[#101828]"><div className="mx-auto max-w-7xl px-5 pb-8 sm:px-10 lg:px-16"><div className="flex items-center justify-between gap-3 text-sm font-bold text-[#8b9ab2]"><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">1</span><span className="hidden sm:inline">Choose cruise</span></div><div className="h-px flex-1 bg-[#1464ff]" /><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">2</span><span className="hidden sm:inline">Booking your journey</span></div><div className="h-px flex-1 bg-[#1464ff]" /><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">3</span><span className="hidden sm:inline">Confirm booking</span></div></div></div><div className="mx-auto max-w-7xl"><section className="flex min-h-[70vh] items-center justify-center"><div className="w-full rounded-[32px] bg-white p-8 text-center shadow-[0_24px_80px_rgba(13,97,255,.12)] sm:p-16"><div className="mx-auto mb-7 flex size-20 items-center justify-center rounded-full bg-[#e7f0ff] text-[#0d61ff]"><Check size={36} /></div><p className="mb-3 text-sm font-bold uppercase tracking-[.18em] text-[#0d61ff]">03 / Confirm booking</p><h1 className="mb-4 text-4xl font-semibold tracking-[-.04em]">Your journey is on its way.</h1><p className="mx-auto max-w-md leading-7 text-slate-500">Your booking request has been received successfully. Our team will contact you as soon as possible to confirm availability and complete your booking.</p><div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row"><button className="primary-button" onClick={() => setSubmitted(false)}>Back to booking</button><button type="button" className="summary-download confirmation-download" onClick={downloadSummary}><Download size={16} /> Download booking summary PDF</button></div><ExclusiveOffers /></div></section></div></main>
 
   {showSeatMap && <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#071b46]/45 p-5" role="dialog" aria-modal="true" aria-labelledby="seat-map-title" onClick={() => setShowSeatMap(false)}><div className="w-full max-w-md rounded-[28px] bg-white p-6 shadow-2xl" onClick={(event) => event.stopPropagation()}><div className="mb-5 flex items-start justify-between"><div><p className="eyebrow">Seat preview</p><h2 id="seat-map-title" className="text-2xl font-semibold">{selectedSeatCategory ? `${selectedSeatCategory} seating` : `${ship.name} layout`}</h2></div><button type="button" onClick={() => setShowSeatMap(false)} className="flex size-9 items-center justify-center rounded-full bg-slate-100 text-xl text-slate-500" aria-label="Close seat map">×</button></div><img src="/seat-category-preview.png" alt={`${selectedSeatCategory ?? ship.name} seating preview`} className="mb-4 h-40 w-full rounded-2xl object-cover" /><div className="rounded-2xl bg-[#f5f8ff] p-5"><div className="mx-auto mb-5 w-28 rounded-b-3xl rounded-t-xl bg-[#d8e7ff] px-3 py-2 text-center text-[10px] font-bold uppercase tracking-wider text-[#0d61ff]">Bow</div><div className="grid grid-cols-4 gap-2">{Array.from({ length: 20 }, (_, index) => <span key={index} className={`flex aspect-square items-center justify-center rounded-lg border text-[10px] font-bold ${index % 5 === 0 ? 'border-[#b9c9e8] bg-white text-slate-400' : 'border-[#9dbdff] bg-[#e6efff] text-[#0d61ff]'}`}>{index % 5 === 0 ? '—' : index + 1}</span>)}</div><div className="mx-auto mt-5 w-28 rounded-t-3xl rounded-b-xl bg-[#d8e7ff] px-3 py-2 text-center text-[10px] font-bold uppercase tracking-wider text-[#0d61ff]">Stern</div></div><div className="mt-5 flex items-center gap-4 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="size-3 rounded bg-[#e6efff]" /> Available</span><span className="flex items-center gap-2"><i className="size-3 rounded bg-white ring-1 ring-[#b9c9e8]" /> Reserved</span></div></div></div>}
 

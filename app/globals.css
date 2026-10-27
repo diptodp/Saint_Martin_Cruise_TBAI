@@ -14,8 +14,13 @@ button { cursor: pointer; }
 .primary-button:hover { transform: translateY(-2px); box-shadow: 0 20px 34px rgba(13, 97, 255, .28), 0 10px 32px rgba(21, 196, 245, .22); filter: saturate(1.08); }
 .primary-button:focus-visible { outline: 3px solid rgba(13, 97, 255, .28); outline-offset: 4px; }
 .primary-button:active { transform: translateY(0); }
-.cruise-hero { position: relative; display: flex; min-height: 500px; align-items: center; overflow: hidden; background-image: linear-gradient(90deg, rgba(20,70,170,.85) 0%, rgba(20,70,170,.45) 45%, rgba(20,70,170,0) 75%), url('/Cover.jpg'); background-position: center, center right; background-size: cover; background-repeat: no-repeat; color: #fff; }
-.cruise-hero-content { position: relative; z-index: 2; width: min(1280px, 100%); padding: 36px 24px 180px 100px; }
+.cruise-hero { position: relative; min-height: 680px; overflow: hidden; background-image: linear-gradient(90deg, rgba(20,70,170,.85) 0%, rgba(20,70,170,.45) 45%, rgba(20,70,170,0) 75%), url('/Cover.jpg'); background-position: center, center right; background-size: cover; background-repeat: no-repeat; color: #fff; }
+.cruise-hero-inner { position: relative; z-index: 2; width: min(1280px, 100%); margin: 0 auto; padding: 0 100px; }
+.cruise-hero-header { display: flex; height: 88px; align-items: center; justify-content: space-between; padding-top: 24px; }
+.hero-logo { display: block; height: 32px; line-height: 0; }
+.hero-logo img { display: block; width: auto; height: 32px; object-fit: contain; }
+.hero-logo:focus-visible { border-radius: 8px; outline: 3px solid rgba(255,255,255,.7); outline-offset: 5px; }
+.cruise-hero-content { margin-top: 48px; padding-bottom: 180px; }
 .cruise-hero-eyebrow { margin: 0 0 10px; font-size: 13px; font-weight: 600; letter-spacing: .12em; }
 .cruise-hero h1 { margin: 0; color: #fff; font-size: clamp(38px, 4.5vw, 60px); font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
 .cruise-hero h1 span { color: #f5b52e; }
@@ -210,6 +215,34 @@ button { cursor: pointer; }
   .ship-details-choose { min-height: 64px; font-size: 17px; }
 }
 @media (max-width: 1023px) and (min-width: 768px) {
+  .booking-stepper { padding: 22px 18px; }
+  .booking-step-label { font-size: 18px; }
+  .booking-step-item { gap: 10px; }
+  .booking-step-circle { width: 52px; height: 52px; flex-basis: 52px; font-size: 15px; }
+  .booking-step-connector { width: 56px; margin: 0 12px; }
+  .ship-selection { padding: 14px; }
+  .ship-selection-heading { margin-bottom: 22px; }
+  .ship-selection-heading h2 { font-size: 34px; }
+  .ship-selection-heading > div > p:last-child { font-size: 16px; }
+  .ship-grid { gap: 14px; }
+  .ship-card { padding: 12px; border-radius: 18px; }
+  .ship-card.selected { padding: 11px; }
+  .ship-art { height: 170px; }
+  .ship-partner-badge { top: 9px; right: 9px; padding: 6px 9px; font-size: 11px; }
+  .ship-partner-badge > span { width: 18px; height: 18px; }
+  .ship-card-content { padding-top: 12px; }
+  .ship-card-heading h3 { font-size: 17px; }
+  .ship-card-heading p { font-size: 14px; }
+  .ship-tags { gap: 6px; margin-top: 12px; }
+  .ship-tags span { padding: 6px 8px; font-size: 12px; }
+  .ship-price-area { gap: 8px; margin-top: 12px; padding-top: 12px; }
+  .ship-price-area strong { font-size: 27px; }
+  .ship-price-area > div > span { font-size: 12px; }
+  .ship-card-actions { gap: 7px; }
+  .ship-card-actions button { font-size: 12px; }
+  .ship-selection-footer .primary-button { min-height: 60px; font-size: 18px; }
+  .trust-section { padding: 26px 14px; }
+  .trust-section ul { gap: 14px; }
   .trust-card { padding: 24px; }
   .trust-icon-tile { width: 56px; height: 56px; flex-basis: 56px; }
   .trust-icon-tile svg { width: 28px; height: 28px; }
@@ -217,6 +250,15 @@ button { cursor: pointer; }
   .trust-keyword-wrap span { height: 20px; }
   .trust-card h3 { font-size: 20px; }
   .trust-card p { font-size: 15px; }
+  .panel { padding: 22px; border-radius: 20px; }
+  .panel-heading { gap: 12px; }
+  .panel-heading h2 { font-size: 28px !important; }
+  .grid > .panel:nth-child(1) .panel-heading h2,
+  .grid > .panel:nth-child(2) .panel-heading h2 { font-size: 29px; }
+  .passenger-step-layout { grid-template-columns: minmax(0, 60fr) minmax(240px, 40fr); gap: 14px; }
+  .summary { padding: 22px; }
+  .ship-details-modal { width: min(760px, 92vw); padding: 24px; }
+  .ship-details-hero { height: 250px; }
 }
 .field { display: flex; flex-direction: column; gap: 8px; color: #526177; font-size: 12px; font-weight: 700; }
 .field input, .field select { width: 100%; border: 1px solid #dfe6f0; border-radius: 12px; background: #fbfcfe; padding: 12px 13px; color: #172033; outline: none; transition: border-color .2s, box-shadow .2s; }
@@ -287,8 +329,8 @@ button { cursor: pointer; }
  .summary-row { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid #dce7f3; padding: 11px 0; color: #5d7190; }.summary-row:last-child { border-bottom: 0; }.summary-row b { color: #19345d; text-align: right; font-weight: 800; }.summary-passenger { margin-top: 14px; border-radius: 14px; background: rgba(255,255,255,.72); padding: 12px 14px; }.summary-total { margin-top: 14px; border-radius: 16px; background: #1557d6; padding: 16px; color: white; box-shadow: 0 10px 24px rgba(21,87,214,.18); } .summary-total span { color: #dbe8ff; }.summary-total b { color: white; font-size: 22px; }.summary .text-blue-100 { color: #58709a !important; }.summary .border-t { border-color: #dce7f3 !important; }.summary .space-y-4 > div:not(.summary-row) { color: #254673; font-weight: 700; }.summary .space-y-4 > div:not(.summary-row) b { color: #183b75; font-size: 18px; }.summary-download { display: inline-flex; width: 100%; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; border: 1px solid #b7cdf5; border-radius: 12px; background: white; padding: 11px 14px; color: #1557d6; font-size: 13px; font-weight: 800; }.confirmation-download { width: auto; margin-top: 0; }
 @media (max-width: 900px) { .passenger-step-layout { display: block; }.passenger-step-layout > .review-section { display: grid; margin-top: 20px; }.passenger-step-layout > .review-section > .summary { grid-row: auto; } }
 @media (max-width: 1023px) {
-  .cruise-hero { min-height: 430px; }
-  .cruise-hero-content { padding-left: 48px; }
+  .cruise-hero { min-height: 560px; }
+  .cruise-hero-inner { padding: 0 64px; }
   .cruise-hero h1 { font-size: 50px; }
   .hero-info-chip { padding: 10px 13px; }
 }
@@ -296,8 +338,11 @@ button { cursor: pointer; }
 @media (max-width: 640px) {
   .panel { padding: 20px; border-radius: 20px; }
   .summary { position: static; }
-  .cruise-hero { min-height: 450px; align-items: flex-start; }
-  .cruise-hero-content { padding: 54px 24px 140px; }
+  .cruise-hero { min-height: 600px; }
+  .cruise-hero-inner { padding: 0 24px; }
+  .cruise-hero-header { height: 72px; padding-top: 24px; }
+  .hero-logo, .hero-logo img { height: 26px; }
+  .cruise-hero-content { margin-top: 32px; padding-bottom: 140px; }
   .cruise-hero-eyebrow { font-size: 12px; }
   .cruise-hero h1 { font-size: clamp(36px, 10vw, 42px); }
   .cruise-hero-description { font-size: 15px; }
@@ -307,6 +352,7 @@ button { cursor: pointer; }
   .hero-fare-chip small { font-size: 12px; }
   .hero-fare-chip strong { font-size: 16px; }
   .hero-location { right: auto; bottom: 20px; left: 24px; padding: 8px 13px; font-size: 13px; }
+  .cruise-hero .hero-location { display: none; }
   .cruise-hero-bottom-fade { height: 120px; }
   .booking-stepper { padding: 20px 12px; }
   .booking-stepper ol { justify-content: space-between; }
@@ -324,7 +370,61 @@ button { cursor: pointer; }
 .view-seat-image:hover { border-color: #0d61ff; background: #e8f1ff; transform: translateY(-1px); }
  .grid > .panel:nth-child(2) .grid-cols-3 { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr) minmax(0, .9fr) minmax(0, .8fr); }
  .grid > .panel:nth-child(2) .grid-cols-3 > span:last-child { display: contents; }
+.exclusive-offers { width: 100%; margin: 40px auto 0; text-align: center; }
+.exclusive-offers > h2 { margin: 0 0 8px; color: #0f1b3d; font-size: 28px; font-weight: 800; }
+.exclusive-offers-description { max-width: 640px; margin: 0 auto 20px; color: #6b7a99; font-size: 18px; line-height: 1.5; }
+.exclusive-offers-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+.voucher-card { container-type: inline-size; position: relative; display: grid; grid-template-columns: 38% 12% 50%; min-height: 210px; overflow: hidden; border-radius: 24px; background: #0b5268; box-shadow: 0 16px 40px rgba(0,90,120,.22); isolation: isolate; mask: radial-gradient(circle 14px at 72% 0, transparent 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 14px at 72% 100%, transparent 98%, #000) bottom / 100% 51% no-repeat; -webkit-mask: radial-gradient(circle 14px at 72% 0, transparent 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 14px at 72% 100%, transparent 98%, #000) bottom / 100% 51% no-repeat; }
+.voucher-left { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; background: var(--voucher-left-bg); clip-path: polygon(0 0, 82% 0, 88% 8%, 79% 17%, 91% 27%, 80% 37%, 90% 48%, 79% 58%, 91% 69%, 80% 79%, 89% 90%, 80% 100%, 0 100%); padding: 28px 14px 28px 44px; text-align: left; }
+.voucher-left h3 { position: relative; z-index: 1; margin: 0; max-width: 260px; color: #0f4c5c; font-family: var(--font-display), Georgia, serif; font-size: 56px; font-style: italic; line-height: 1.05; text-shadow: 0 2px 10px rgba(0,0,0,.08); }
+.voucher-supporting-text { position: relative; z-index: 1; max-width: 290px; margin: 8px 0 0; color: rgba(15,76,92,.8); font-size: 16px; line-height: 1.35; }
+.voucher-code-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 6px; margin-top: 12px; color: #0f4c5c; font-family: var(--font-display), Georgia, serif; font-size: 22px; }
+.voucher-sand { position: relative; z-index: 2; margin-left: -28px; background-color: #f7c98b; background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,.35) 0 2px, transparent 2.5px), radial-gradient(circle at 65% 70%, rgba(190,120,50,.18) 0 1.5px, transparent 2px), linear-gradient(120deg, #ffe9c7, #f7c98b); clip-path: polygon(20% 0, 100% 0, 78% 7%, 100% 17%, 80% 28%, 100% 39%, 78% 50%, 100% 61%, 80% 73%, 100% 84%, 78% 94%, 88% 100%, 0 100%, 18% 92%, 0 82%, 20% 70%, 0 58%, 20% 46%, 0 34%, 20% 22%, 0 10%); }
+.voucher-decoration { position: absolute; z-index: 0; pointer-events: none; color: rgba(255,255,255,.2); }
+.voucher-decoration-one { top: 24px; right: 22%; width: 22px; height: 22px; border: 3px solid rgba(255,255,255,.2); border-radius: 50%; }
+.voucher-decoration-two { right: 10%; bottom: 28px; width: 10px; height: 10px; border-radius: 50%; background: rgba(255,245,160,.45); }
+.voucher-decoration-sparkle { top: 34px; right: 8%; color: rgba(255,255,255,.3); font-size: 22px; }
+.voucher-copy { position: relative; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 6px; background: transparent; padding: 4px; color: #0f4c5c; }
+.voucher-copy:hover, .voucher-copy:focus-visible { background: rgba(13,101,255,.1); }
+.voucher-copy:focus-visible { outline: 2px solid #0d65ff; outline-offset: 2px; }
+.voucher-tooltip { position: absolute; bottom: calc(100% + 6px); left: 50%; display: none; transform: translateX(-50%); border-radius: 5px; background: #0f1b3d; padding: 4px 7px; color: #fff; font-family: var(--font-body); font-size: 10px; white-space: nowrap; }
+.voucher-copy:hover .voucher-tooltip, .voucher-copy:focus-visible .voucher-tooltip, .voucher-tooltip.is-visible { display: inline-block; }
+.voucher-book-button { width: auto; min-height: clamp(32px, 5cqw, 42px); margin-top: 14px; border-radius: 11px; padding: 0 clamp(14px, 2.4cqw, 24px); font-size: clamp(11px, 1.15cqw, 14px); gap: 6px; }
+.voucher-book-button svg { width: clamp(11px, 1.3cqw, 15px); height: clamp(11px, 1.3cqw, 15px); }
+.voucher-right { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background-image: linear-gradient(90deg, rgba(64,224,208,.55) 0%, rgba(0,150,170,.65) 55%, rgba(0,82,110,.85) 100%), var(--voucher-image); background-position: center; background-size: cover; color: #fff; }
+.voucher-right::after { position: absolute; inset: 0; opacity: .08; background-image: repeating-radial-gradient(ellipse at 20% 20%, transparent 0 18px, #fff 19px 20px, transparent 21px 40px); content: ''; pointer-events: none; }
+.voucher-right span { position: relative; z-index: 1; font-family: var(--font-display), Georgia, serif; font-size: 24px; font-style: italic; }
+.voucher-right strong { position: relative; z-index: 1; margin-top: 3px; color: #fad04a; font-family: var(--font-display), Georgia, serif; font-size: 110px; font-weight: 700; line-height: 1; text-shadow: 0 0 3px rgba(255,244,170,.8), 0 4px 20px rgba(0,0,0,.3); }
+.voucher-tear-line { position: absolute; z-index: 3; top: 12px; bottom: 12px; left: 72%; border-left: 2px dashed rgba(255,255,255,.8); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .voucher-book-button:hover { transform: none; } }
 @media (max-width: 640px) { .grid > .panel:nth-child(2) .grid-cols-3 { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr) minmax(0, .9fr) minmax(0, .7fr); } }
+@media (min-width: 641px) and (max-width: 1023px) {
+  .voucher-card { min-height: 185px; }
+  .voucher-left h3 { font-size: 44px; }
+  .voucher-right strong { font-size: 80px; }
+}
+@media (max-width: 640px) {
+  .exclusive-offers { margin-top: 32px; }
+  .exclusive-offers > h2 { font-size: 22px; }
+  .exclusive-offers-description { max-width: 320px; margin-bottom: 16px; font-size: 14px; }
+  .voucher-card { width: 100%; min-height: 0; aspect-ratio: 3.4 / 1; border-radius: 14px; box-shadow: 0 8px 20px rgba(0,90,120,.18); mask: radial-gradient(circle 7px at 72% 0, transparent 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 7px at 72% 100%, transparent 98%, #000) bottom / 100% 51% no-repeat; -webkit-mask: radial-gradient(circle 7px at 72% 0, transparent 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 7px at 72% 100%, transparent 98%, #000) bottom / 100% 51% no-repeat; }
+  .voucher-left { min-width: 0; padding: 2cqw 1cqw 2cqw 3cqw; }
+  .voucher-left h3 { max-width: 100%; font-size: clamp(16px, 5.65cqw, 22px); }
+  .voucher-supporting-text { display: none; }
+  .voucher-code-row { max-width: 100%; margin-top: 1cqw; font-size: clamp(8px, 2.55cqw, 10px); white-space: nowrap; }
+  .voucher-copy { padding: 1px; }
+  .voucher-copy svg { width: 12px; height: 12px; }
+  .voucher-book-button { min-height: clamp(22px, 7cqw, 27px); margin-top: 1.5cqw; border-radius: 6px; padding: 0 clamp(7px, 2.2cqw, 10px); font-size: clamp(8px, 2.7cqw, 10px); gap: 3px; }
+  .voucher-book-button svg { width: clamp(9px, 2.8cqw, 12px); height: clamp(9px, 2.8cqw, 12px); }
+  .voucher-book-button::after { position: absolute; inset: -6px 0; content: ''; }
+  .voucher-sand { min-width: 0; margin-left: -2cqw; }
+  .voucher-right span { font-size: clamp(9px, 2.85cqw, 11px); }
+  .voucher-right strong { margin-top: 1px; font-size: clamp(30px, 10.3cqw, 40px); }
+  .voucher-tear-line { top: 7px; right: auto; bottom: 7px; left: 72%; border-top: 0; border-left: 1px dashed rgba(255,255,255,.8); }
+  .voucher-decoration-one { top: 8%; right: 16%; width: 7%; height: 18%; border-width: 1px; }
+  .voucher-decoration-two { right: 7%; bottom: 12%; width: 4%; height: 10%; }
+  .voucher-decoration-sparkle { top: 10%; right: 5%; font-size: 12px; }
+}
 .pricing-toggle { margin: 18px 0 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 118px; border: 1px solid #c7d9ff; border-radius: 999px; background: linear-gradient(135deg, #ffffff, #f2f7ff); padding: 10px 18px; color: #1456d8; font-size: 12px; font-weight: 800; letter-spacing: .01em; box-shadow: 0 6px 14px rgba(13,97,255,.1); transition: border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease; }
 .pricing-toggle:hover { border-color: #0d61ff; background: linear-gradient(135deg, #edf4ff, #dceaff); color: #0b4fc5; box-shadow: 0 9px 20px rgba(13,97,255,.18); transform: translateY(-1px); }
 .pricing-toggle:focus-visible { outline: 3px solid rgba(13,97,255,.22); outline-offset: 3px; }
