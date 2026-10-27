@@ -72,6 +72,10 @@ button { cursor: pointer; }
 .ship-selection { margin: 0 -16px; background: #f3f7ff; padding: 16px; }
 .ship-selection-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 28px; }
 .ship-selection-heading h2 { margin-top: 8px; color: #0f1b3d; font-size: clamp(32px, 4vw, 42px); font-weight: 800; letter-spacing: -.05em; }
+.selected-ship-banner { display: grid; grid-template-columns: minmax(220px, .7fr) minmax(0, 1.3fr); align-items: center; gap: 24px; margin-bottom: 24px; overflow: hidden; border: 1px solid #e3eaf6; border-radius: 22px; background: #fff; padding: 16px; box-shadow: 0 8px 22px rgba(29,67,131,.07); }
+.selected-ship-banner-image { min-height: 180px; border-radius: 16px; background-position: center; background-size: cover; }
+.selected-ship-banner h1 { margin-top: 8px; color: #0f1b3d; font-size: clamp(24px, 4vw, 40px); font-weight: 800; letter-spacing: -.04em; }
+.selected-ship-banner p:last-child { margin-top: 8px; color: #6b7a99; font-size: 16px; }
 .ship-selection-heading > div > p:last-child { margin-top: 8px; color: #6b7a99; font-size: 18px; }
 .ship-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .ship-card { overflow: hidden; border: 1px solid #e3eaf6; border-radius: 22px; background: #fff; padding: 16px; text-align: left; box-shadow: 0 8px 22px rgba(29, 67, 131, .07); transition: border-color .2s, transform .2s, box-shadow .2s; }
@@ -169,6 +173,9 @@ button { cursor: pointer; }
 .trust-card p { position: relative; z-index: 1; max-width: 300px; margin: 10px 0 0; color: #5b6b87; font-size: 16px; line-height: 1.5; }
 @media (prefers-reduced-motion: reduce) { .trust-card { transition: none; }.trust-card:hover { transform: none; } }
 @media (max-width: 767px) {
+  .selected-ship-banner { grid-template-columns: 1fr; gap: 16px; padding: 12px; }
+  .selected-ship-banner-image { min-height: 150px; }
+  .selected-ship-banner h1 { font-size: 26px; }
   .ship-selection-heading { align-items: flex-start; flex-direction: column; margin-bottom: 22px; }
   .ship-selection-heading > p { margin: 0; }
   .ship-grid { grid-template-columns: 1fr; }
