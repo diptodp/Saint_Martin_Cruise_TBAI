@@ -199,6 +199,9 @@ function SelectedShipBanner({ ship }: { ship: Ship }) {
 function ShipHeader({ ship, onBack, onViewFares }: { ship: Ship; onBack: () => void; onViewFares: () => void }) {
   const [saved, setSaved] = useState(false)
   const [toast, setToast] = useState('')
+  const nameParts = ship.name.trim().split(/\s+/)
+  const lastNamePart = nameParts.pop() ?? ship.name
+  const namePrefix = nameParts.join(' ')
 
   async function shareShip() {
     const shareData = { title: ship.name, text: `Book ${ship.name}`, url: window.location.href }
@@ -233,7 +236,7 @@ function ShipHeader({ ship, onBack, onViewFares }: { ship: Ship; onBack: () => v
     </div>
     <p className="ship-location"><MapPin size={16} /><span>{ship.departurePoint}</span><b>•</b><span>Cox&apos;s Bazar to Saint Martin&apos;s Island · {ship.journeyDuration}</span></p>
     <div className="ship-mobile-title-block">
-      <div className="ship-mobile-name"><h1>{ship.name}</h1>{' '}<span className="ship-verified" title="Verified operator" aria-label="Verified operator"><Check size={17} strokeWidth={3} /></span></div>
+      <div className="ship-mobile-name"><h1 className="ship-title">{namePrefix && `${namePrefix} `}<span className="title-end">{lastNamePart}<span className="ship-verified" title="Verified operator" aria-label="Verified operator"><Check size={17} strokeWidth={3} /></span></span></h1></div>
       <div className="ship-mobile-badges"><span className="ship-badge ship-badge-premium"><Star size={16} fill="currentColor" />{ship.class}</span><span className="ship-badge ship-badge-choice"><Award size={16} />Traveller&apos;s Choice 2026</span></div>
       <p className="ship-mobile-location"><MapPin size={18} /><span>{ship.departurePoint}</span><b>•</b><span>{ship.journeyDuration}</span></p>
       <div className="ship-mobile-actions"><button type="button" className={`ship-heart ${saved ? 'saved' : ''}`} onClick={() => setSaved((current) => !current)} aria-label={saved ? 'Remove from favourites' : 'Save to favourites'} aria-pressed={saved}><Heart size={23} fill={saved ? 'currentColor' : 'none'} /></button><button type="button" className="ship-share-button" onClick={shareShip}><Share2 size={20} />Share</button><button type="button" className="primary-button ship-fares-button" onClick={onViewFares}>View Fares</button></div>

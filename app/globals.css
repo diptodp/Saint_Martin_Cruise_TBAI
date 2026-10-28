@@ -368,9 +368,11 @@ button { cursor: pointer; }
   .ship-mobile-icon-button { display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 50%; background: transparent; color: #0f1b3d; }
   .ship-title-row, .ship-header > .ship-location { display: none; }
   .ship-mobile-title-block { display: block; order: 3; min-width: 0; padding: 24px; }
-  .ship-mobile-name { display: block; min-width: 0; }
-  .ship-mobile-name h1 { display: inline; margin: 0; color: #0f1b3d; font-size: 34px; font-weight: 800; letter-spacing: -.045em; line-height: 1.15; }
-  .ship-mobile-name .ship-verified { display: inline-flex; width: 28px; height: 28px; margin-left: 10px; vertical-align: middle; }
+  .ship-mobile-name { display: block; min-width: 0; line-height: 1.15; }
+  .ship-mobile-name .ship-title { display: block; margin: 0; color: #0f1b3d; font-size: 34px; font-weight: 800; letter-spacing: -.045em; line-height: 1.15; }
+  .ship-mobile-name .title-end { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; vertical-align: top; }
+  .ship-mobile-name .ship-verified { display: inline-flex; width: .72em; height: .72em; flex: 0 0 auto; align-items: center; justify-content: center; margin: 0; padding: 0; transform: translateY(-0.04em); }
+  .ship-mobile-name .ship-verified svg { width: 60%; height: 60%; }
   .ship-mobile-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
   .ship-mobile-badges .ship-badge { padding: 8px 14px; font-size: 15px; }
   .ship-mobile-badges .ship-badge-premium { font-size: 16px; }
@@ -406,7 +408,7 @@ button { cursor: pointer; }
   .fare-chart-row strong { font-size: 13px; }
 }
 @media (max-width: 320px) {
-  .ship-mobile-name h1 { font-size: 28px; }
+  .ship-mobile-name .ship-title { font-size: 28px; }
   .ship-mobile-actions .ship-share-button, .ship-mobile-actions .ship-fares-button { height: 48px; min-height: 48px; padding-inline: 14px; font-size: 15px; }
 }
 @media (max-width: 339px) {
