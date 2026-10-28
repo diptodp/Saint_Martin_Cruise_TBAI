@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Fragment, type CSSProperties, type ReactNode } from 'react'
-import { ArrowRight, Armchair, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock3, Copy, CreditCard, Download, Headset, Info, MapPin, Minus, Plus, Ship, ShieldCheck, Ticket, Trash2, UserRound } from 'lucide-react'
+import { ArrowRight, Armchair, Award, CalendarDays, Camera, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock3, Copy, CreditCard, Download, Headset, Heart, Info, MapPin, Minus, Play, Plus, Share2, Ship, ShieldCheck, Star, Ticket, Trash2, UserRound, X } from 'lucide-react'
 import { jsPDF } from 'jspdf'
 import { ShipDetailsModal, type ShipDetailsData } from '@/components/ShipDetailsModal'
 
@@ -13,10 +13,11 @@ type SeatCategory = { id: string; name: string; type: 'Seat' | 'Lounge' | 'Cabin
 type Passenger = { name: string; nid: string; dob: string; tripType: TripType; roomTypeId: string }
 type ContactInformation = { phone: string; whatsapp: string; email: string }
 type Schedule = { id: string; date: string; day: string; departure: string; arrival: string; duration: string }
-type Ship = { id: string; name: string; subtitle: string; description: string; accent: string; image: string; journeyDuration: string; schedules: Schedule[]; rooms: RoomType[]; operator: string; session: string; route: string; departurePoint: string; currency: string; basePrice: number; seatCategories: SeatCategory[] }
+type ShipReview = { title: string; text: string; author: string }
+type Ship = { id: string; name: string; subtitle: string; description: string; accent: string; image: string; gallery: string[]; videoUrl?: string; class: string; rating?: number; reviewCount?: number; positivePercent?: number; topReview?: ShipReview; journeyDuration: string; schedules: Schedule[]; rooms: RoomType[]; operator: string; session: string; route: string; departurePoint: string; currency: string; basePrice: number; seatCategories: SeatCategory[] }
 
 const ships: Ship[] = [
-  { id: 'ocean-dream', name: 'MV KARNAFULY EXPRESS', subtitle: 'Premium coastal escape', description: 'Explore seating categories, fares and selected sailing dates. Verified journey duration, passenger capacity and onboard facilities should be supplied by the operator.', accent: '#0d61ff', image: '/karnafuly-express.jpg', journeyDuration: 'Approx. 12 hours journey', operator: 'Karnafuly Cruise Line', session: '2026-2027', route: 'Cox\'s Bazar - Saint Martin - Cox\'s Bazar', departurePoint: 'Nuniya Chora Jetty Ghat, Cox\'s Bazar', currency: '৳', basePrice: 1800, seatCategories: [
+  { id: 'ocean-dream', name: 'MV KARNAFULY EXPRESS', subtitle: 'Premium coastal escape', description: 'Explore seating categories, fares and selected sailings aboard a comfortable cruise with verified journey details, passenger capacity and onboard facilities supplied by the operator.', accent: '#0d61ff', image: '/karnafuly-express.jpg', gallery: ['/karnafuly-express.jpg'], class: 'Premium', rating: 8.7, reviewCount: 234, positivePercent: 90, topReview: { title: 'A comfortable journey', text: 'The ship was clean, the crew were helpful, and the journey to Saint Martin was smooth and enjoyable.', author: 'Nusrat M.' }, journeyDuration: 'Approx. 12 hours journey', operator: 'Karnafuly Cruise Line', session: '2026-2027', route: 'Cox\'s Bazar - Saint Martin - Cox\'s Bazar', departurePoint: 'Nuniya Chora Jetty Ghat, Cox\'s Bazar', currency: '৳', basePrice: 1800, seatCategories: [
     { id: 'lavender', name: 'Lavender Seat', type: 'Seat', roundTrip: 4200, oneWay: 2200 },
     { id: 'marigold', name: 'Marigold Seat', type: 'Seat', roundTrip: 4200, oneWay: 2200 },
     { id: 'open-deck', name: 'Open Deck Seat', type: 'Seat', roundTrip: 4400, oneWay: 2300 },
@@ -33,7 +34,7 @@ const ships: Ship[] = [
     { id: 'od-3', date: '2026-12-01', day: 'Tuesday', departure: '07:00 AM', arrival: '03:00 PM', duration: '8h' },
     { id: 'od-4', date: '2027-01-09', day: 'Saturday', departure: '08:00 AM', arrival: '02:30 PM', duration: '6h 30m' },
   ], rooms: [{ id: 'lavender', name: 'Lavender Seat', oneWayPrice: 2200, roundTripPrice: 4200, note: 'Seat' }, { id: 'marigold', name: 'Marigold Seat', oneWayPrice: 2200, roundTripPrice: 4200, note: 'Seat' }, { id: 'open-deck', name: 'Open Deck Seat', oneWayPrice: 2300, roundTripPrice: 4400, note: 'Seat' }, { id: 'gladiolus', name: 'Gladiolus Business Chair', oneWayPrice: 2600, roundTripPrice: 5000, note: 'Seat' }, { id: 'lilac', name: 'Lilac Lounge', oneWayPrice: 2800, roundTripPrice: 5500, note: 'Lounge' }, { id: 'chrysanthemum', name: 'Chrysanthemum Lounge', oneWayPrice: 3000, roundTripPrice: 5800, note: 'Lounge' }, { id: 'single-cabin', name: 'Single Cabin', oneWayPrice: 3600, roundTripPrice: 7000, note: 'Cabin' }, { id: 'twin-cabin', name: 'Twin Cabin', oneWayPrice: 7000, roundTripPrice: 13000, note: 'Cabin' }, { id: 'vip-cabin', name: 'VIP Cabin', oneWayPrice: 9000, roundTripPrice: 16000, note: 'Cabin' }, { id: 'vvip-cabin', name: 'VVIP Cabin', oneWayPrice: 10000, roundTripPrice: 19000, note: 'Cabin' }] },
-  { id: 'sea-breeze', name: 'MV BARO-AWLIA', subtitle: 'The relaxed way to travel', description: 'Explore seating categories, fares and selected sailing dates. Verified journey duration and onboard facilities should be supplied by the operator.', accent: '#7c5cff', image: '/baro-awlia.jpg', journeyDuration: 'Approx. 10 hours journey', operator: 'Karnafuly Cruise Line', session: '2026-2027', route: 'Cox\'s Bazar - Saint Martin - Cox\'s Bazar', departurePoint: 'Nuniya Chora Jetty Ghat, Cox\'s Bazar', currency: '৳', basePrice: 1800, seatCategories: [
+  { id: 'sea-breeze', name: 'MV BARO-AWLIA', subtitle: 'The relaxed way to travel', description: 'Explore seating categories, fares and selected sailings aboard a comfortable cruise with verified journey details and onboard facilities supplied by the operator.', accent: '#7c5cff', image: '/baro-awlia.jpg', gallery: ['/baro-awlia.jpg'], class: 'Premium', rating: 8.7, reviewCount: 234, positivePercent: 90, topReview: { title: 'A relaxed way to travel', text: 'A pleasant ship with friendly support and a memorable route across the water.', author: 'Rafi H.' }, journeyDuration: 'Approx. 10 hours journey', operator: 'Karnafuly Cruise Line', session: '2026-2027', route: 'Cox\'s Bazar - Saint Martin - Cox\'s Bazar', departurePoint: 'Nuniya Chora Jetty Ghat, Cox\'s Bazar', currency: '৳', basePrice: 1800, seatCategories: [
     { id: 'sun-deck', name: 'Sun Deck Seat', type: 'Seat', roundTrip: 4200, oneWay: 2200 },
     { id: 'main-deck', name: 'Main Deck Seat', type: 'Seat', roundTrip: 4200, oneWay: 2200 },
     { id: 'panorama', name: 'Panorama Business Chair', type: 'Seat', roundTrip: 4500, oneWay: 2300 },
@@ -83,7 +84,45 @@ function TrustItem({ item }: { item: TrustItemData }) {
 }
 
 function TrustSection() {
-  return <section className="trust-section" aria-label="Booking benefits"><ul>{trustItems.map((item) => <TrustItem key={item.title} item={item} />)}</ul></section>
+  const scrollerRef = useRef<HTMLUListElement>(null)
+  const [activeTrustItem, setActiveTrustItem] = useState(0)
+
+  useEffect(() => {
+    const scroller = scrollerRef.current
+    if (!scroller) return
+
+    const cards = Array.from(scroller.children)
+    const observer = new IntersectionObserver((entries) => {
+      const visibleCard = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visibleCard) setActiveTrustItem(cards.indexOf(visibleCard.target))
+    }, { root: scroller, threshold: [0.6, 0.8] })
+
+    cards.forEach((card) => observer.observe(card))
+    return () => observer.disconnect()
+  }, [])
+
+  function scrollToTrustItem(index: number) {
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+    scrollerRef.current?.children[index]?.scrollIntoView({ behavior, block: 'nearest', inline: 'start' })
+  }
+
+  function handleScrollerKeyDown(event: React.KeyboardEvent<HTMLUListElement>) {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+    event.preventDefault()
+    const nextIndex = Math.max(0, Math.min(trustItems.length - 1, activeTrustItem + (event.key === 'ArrowRight' ? 1 : -1)))
+    scrollToTrustItem(nextIndex)
+  }
+
+  return <section className="trust-section" aria-label="Booking benefits">
+    <ul ref={scrollerRef} className="trust-scroller" role="region" aria-label="Booking benefits" tabIndex={0} onKeyDown={handleScrollerKeyDown}>
+      {trustItems.map((item) => <TrustItem key={item.title} item={item} />)}
+    </ul>
+    <div className="trust-indicators" aria-label="Booking benefit navigation">
+      {trustItems.map((item, index) => <button key={item.title} type="button" className={index === activeTrustItem ? 'active' : ''} aria-label={`Go to benefit ${index + 1}`} aria-current={index === activeTrustItem ? 'true' : undefined} onClick={() => scrollToTrustItem(index)} />)}
+    </div>
+  </section>
 }
 
 type Voucher = {
@@ -149,12 +188,228 @@ function HeroBanner() {
 }
 
 function BookingStepper({ currentStep, shipRoute }: { currentStep: 1 | 2 | 3; shipRoute?: boolean }) {
-  const steps = shipRoute ? ['Book your journey', 'Passenger information', 'Review and confirm'] : ['Choose your ship', 'Book your journey', 'Review and confirm']
+  const steps = ['Choose your ship', 'Book your journey', 'Review and confirm']
   return <nav className="booking-stepper" aria-label="Booking progress"><ol>{steps.map((label, index) => { const step = index + 1; const complete = step < currentStep; const active = step === currentStep; return <li key={label} className={`${active ? 'active' : ''} ${complete ? 'complete' : ''}`} aria-current={active ? 'step' : undefined}><span className="booking-step-item"><span className="booking-step-circle">{complete ? <Check size={24} aria-label="Completed" /> : `0${step}`}</span><span className="booking-step-label">{label}</span></span>{step < steps.length && <span className={`booking-step-connector ${complete ? 'complete' : ''}`} aria-hidden="true" />}</li> })}</ol></nav>
 }
 
 function SelectedShipBanner({ ship }: { ship: Ship }) {
   return <section className="selected-ship-banner" aria-label={`Selected ship: ${ship.name}`}><div className={`selected-ship-banner-image ${ship.id === 'ocean-dream' ? 'ship-art-ocean' : 'ship-art-breeze'}`} role="img" aria-label={`${ship.name} sailing on the sea`} /><div><p className="eyebrow">Selected ship</p><h1>{ship.name}</h1><p>{ship.subtitle}</p></div></section>
+}
+
+function ShipHeader({ ship, onBack, onViewFares }: { ship: Ship; onBack: () => void; onViewFares: () => void }) {
+  const [saved, setSaved] = useState(false)
+  const [toast, setToast] = useState('')
+
+  async function shareShip() {
+    const shareData = { title: ship.name, text: `Book ${ship.name}`, url: window.location.href }
+    if (navigator.share) await navigator.share(shareData).catch(() => undefined)
+    else {
+      await navigator.clipboard.writeText(window.location.href)
+      setToast('Link copied')
+      window.setTimeout(() => setToast(''), 2200)
+    }
+  }
+
+  return <header className="ship-header">
+    <div className="ship-mobile-app-bar">
+      <button type="button" className="ship-mobile-back" onClick={onBack}><ChevronLeft size={24} />Back</button>
+      <div className="ship-mobile-app-actions">
+        <button type="button" className={`ship-heart ${saved ? 'saved' : ''}`} onClick={() => setSaved((current) => !current)} aria-label={saved ? 'Remove from favourites' : 'Save to favourites'} aria-pressed={saved}><Heart size={22} fill={saved ? 'currentColor' : 'none'} /></button>
+        <button type="button" className="ship-mobile-icon-button" onClick={shareShip} aria-label="Share ship"><Share2 size={21} /></button>
+      </div>
+    </div>
+    <div className="ship-title-row">
+      <div className="ship-title-copy">
+        <h1>{ship.name}</h1>
+        <span className="ship-verified" title="Verified operator" aria-label="Verified operator"><Check size={17} strokeWidth={3} /></span>
+        <span className="ship-badge ship-badge-premium"><Star size={14} fill="currentColor" />{ship.class}</span>
+        <span className="ship-badge ship-badge-choice"><Award size={14} />Traveller&apos;s Choice 2026</span>
+      </div>
+      <div className="ship-header-actions">
+        <button type="button" className={`ship-heart ${saved ? 'saved' : ''}`} onClick={() => setSaved((current) => !current)} aria-label={saved ? 'Remove from favourites' : 'Save to favourites'} aria-pressed={saved}><Heart size={20} fill={saved ? 'currentColor' : 'none'} /></button>
+        <button type="button" className="ship-share-button" onClick={shareShip}><Share2 size={17} />Share</button>
+        <button type="button" className="primary-button ship-fares-button" onClick={onViewFares}>View Fares</button>
+      </div>
+    </div>
+    <p className="ship-location"><MapPin size={16} /><span>{ship.departurePoint}</span><b>•</b><span>Cox&apos;s Bazar to Saint Martin&apos;s Island · {ship.journeyDuration}</span></p>
+    <div className="ship-mobile-title-block">
+      <div className="ship-mobile-name"><h1>{ship.name}</h1>{' '}<span className="ship-verified" title="Verified operator" aria-label="Verified operator"><Check size={17} strokeWidth={3} /></span></div>
+      <div className="ship-mobile-badges"><span className="ship-badge ship-badge-premium"><Star size={16} fill="currentColor" />{ship.class}</span><span className="ship-badge ship-badge-choice"><Award size={16} />Traveller&apos;s Choice 2026</span></div>
+      <p className="ship-mobile-location"><MapPin size={18} /><span>{ship.departurePoint}</span><b>•</b><span>{ship.journeyDuration}</span></p>
+      <div className="ship-mobile-actions"><button type="button" className={`ship-heart ${saved ? 'saved' : ''}`} onClick={() => setSaved((current) => !current)} aria-label={saved ? 'Remove from favourites' : 'Save to favourites'} aria-pressed={saved}><Heart size={23} fill={saved ? 'currentColor' : 'none'} /></button><button type="button" className="ship-share-button" onClick={shareShip}><Share2 size={20} />Share</button><button type="button" className="primary-button ship-fares-button" onClick={onViewFares}>View Fares</button></div>
+    </div>
+    {toast && <span className="ship-share-toast" role="status">{toast}</span>}
+  </header>
+}
+
+function ShipGallery({ ship }: { ship: Ship }) {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [activeMobileImage, setActiveMobileImage] = useState(0)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const triggerRef = useRef<HTMLElement | null>(null)
+  const mobileGalleryRef = useRef<HTMLDivElement>(null)
+  const images = Array.from({ length: 5 }, (_, index) => ship.gallery[index] ?? ship.gallery[0] ?? ship.image)
+  const allImages = Array.from({ length: Math.max(5, ship.gallery.length) }, (_, index) => ship.gallery[index % ship.gallery.length] ?? ship.image)
+  const mobileImages = ship.gallery.length ? ship.gallery : [ship.image]
+
+  useEffect(() => {
+    if (lightboxIndex === null) return
+    closeButtonRef.current?.focus()
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setLightboxIndex(null)
+      if (event.key === 'ArrowRight') setLightboxIndex((current) => current === null ? 0 : (current + 1) % allImages.length)
+      if (event.key === 'ArrowLeft') setLightboxIndex((current) => current === null ? 0 : (current - 1 + allImages.length) % allImages.length)
+      if (event.key === 'Tab') {
+        event.preventDefault()
+        closeButtonRef.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [allImages.length, lightboxIndex])
+
+  useEffect(() => {
+    if (lightboxIndex === null) triggerRef.current?.focus()
+  }, [lightboxIndex])
+
+  useEffect(() => {
+    const gallery = mobileGalleryRef.current
+    if (!gallery) return
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visible) setActiveMobileImage(Number((visible.target as HTMLElement).dataset.index ?? 0))
+    }, { root: gallery, threshold: .6 })
+    Array.from(gallery.children).forEach((slide) => observer.observe(slide))
+    return () => observer.disconnect()
+  }, [mobileImages.length])
+
+  function openGallery(index: number, event: React.MouseEvent<HTMLElement>) {
+    triggerRef.current = event.currentTarget
+    setLightboxIndex(index)
+  }
+
+  return <>
+    <div className="ship-gallery">
+      {images.map((image, index) => <button key={`${image}-${index}`} type="button" className={`ship-gallery-tile ship-gallery-tile-${index + 1}`} onClick={(event) => openGallery(index, event)} aria-label={`Open photo ${index + 1} of ${allImages.length}`}>
+        <img src={image} alt={`${ship.name} ${index === 0 ? 'deck' : 'photo'}`} loading={index === 0 ? 'eager' : 'lazy'} />
+        {index === 0 && ship.videoUrl && <span className="ship-gallery-play" aria-label="Play ship video"><Play size={24} fill="white" /></span>}
+        {index === 4 && <span className="ship-gallery-overlay"><Camera size={18} />See all photo</span>}
+      </button>)}
+      <button type="button" className="ship-gallery-mobile-button" onClick={(event) => openGallery(0, event)} aria-label={`Open all ${allImages.length} photos`}><Camera size={14} />See all photo ({allImages.length})</button>
+    </div>
+    <div className="ship-mobile-gallery-wrap">
+      <div className="ship-mobile-gallery" ref={mobileGalleryRef}>
+        {mobileImages.map((image, index) => <button key={`${image}-mobile-${index}`} type="button" className="ship-mobile-slide" data-index={index} onClick={(event) => openGallery(index, event)} aria-label={`Open photo ${index + 1} of ${mobileImages.length}`}><img src={image} alt={`${ship.name} ${index === 0 ? 'deck' : 'photo'}`} loading={index === 0 ? 'eager' : 'lazy'} />{index === 0 && ship.videoUrl && <span className="ship-gallery-play" aria-label="Play ship video"><Play size={24} fill="white" /></span>}</button>)}
+        <button type="button" className="ship-gallery-mobile-button" onClick={(event) => openGallery(0, event)} aria-label={`Open all ${mobileImages.length} photos`}><Camera size={14} />See all photo ({mobileImages.length})</button>
+      </div>
+      <div className="ship-mobile-pagination" aria-label="Photo navigation">{Array.from({ length: Math.min(5, mobileImages.length) }, (_, index) => <span key={index} className={index === Math.min(activeMobileImage, 4) ? 'active' : ''} />)}</div>
+    </div>
+    {lightboxIndex !== null && <div className="ship-lightbox" role="dialog" aria-modal="true" aria-label="Ship photo gallery" onClick={() => setLightboxIndex(null)}>
+      <div className="ship-lightbox-content" onClick={(event) => event.stopPropagation()}>
+        <button type="button" ref={closeButtonRef} className="ship-lightbox-close" onClick={() => setLightboxIndex(null)} aria-label="Close photo gallery"><X size={24} /></button>
+        <img src={allImages[lightboxIndex % allImages.length]} alt={`${ship.name} photo ${lightboxIndex + 1}`} />
+        <span className="ship-lightbox-counter">{lightboxIndex + 1} / {allImages.length}</span>
+      </div>
+    </div>}
+  </>
+}
+
+const shipTabs = [
+  ['overview', 'Overview'], ['seat-categories', 'Seat categories'], ['schedule', 'Schedule'], ['facilities', 'Facilities'],
+  ['reviews', 'Reviews'], ['policies', 'Policies'], ['boarding-point', 'Boarding point'], ['faq', 'FAQ'],
+] as const
+
+type ShipTabModalKind = 'seat-categories' | 'schedule'
+
+function ShipTabs({ onOpenModal }: { onOpenModal: (tab: ShipTabModalKind) => void }) {
+  const [activeTab, setActiveTab] = useState('overview')
+  const tabRef = useRef<HTMLAnchorElement | null>(null)
+
+  useEffect(() => {
+    const sections = shipTabs.map(([id]) => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visible) setActiveTab(visible.target.id)
+    }, { rootMargin: '-20% 0px -65% 0px', threshold: [0, .2, .5] })
+    sections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
+  }, [])
+
+  function activateTab(id: string) {
+    setActiveTab(id)
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  useEffect(() => { tabRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }) }, [activeTab])
+
+  return <nav className="ship-tabs-wrap" aria-label="Ship sections"><div className="ship-tabs" role="tablist">
+    {shipTabs.map(([id, label]) => <a key={id} href={`#${id}`} role="tab" ref={activeTab === id ? tabRef : undefined} aria-selected={activeTab === id} className={activeTab === id ? 'active' : ''} onClick={(event) => { event.preventDefault(); if (id === 'seat-categories' || id === 'schedule') onOpenModal(id); else activateTab(id) }}>{label}</a>)}
+  </div></nav>
+}
+
+function ShipAbout({ ship }: { ship: Ship }) {
+  const [expanded, setExpanded] = useState(false)
+  const description = ship.description || `Sail from Cox's Bazar to Saint Martin's Island aboard ${ship.name}, operated by ${ship.operator}. Choose from comfortable seats, lounges and cabins, with scheduled sailings throughout the season.`
+  return <section className="ship-about-layout" id="overview">
+    <div className="ship-about-copy"><h2>About This Ship</h2><p className={expanded ? 'expanded' : ''}>{description}</p><button type="button" onClick={() => setExpanded((current) => !current)}>{expanded ? 'Show Less' : 'Read More'}</button></div>
+    {ship.rating && ship.reviewCount && <aside className="ship-review-card" id="reviews"><div className="ship-review-score"><strong>{ship.rating}</strong><span><b>Excellent · {ship.reviewCount} reviews</b><small>{ship.positivePercent ?? 90}% positive reviews</small></span></div><h3>{ship.topReview?.title ?? 'Nice journey'}</h3><p>{ship.topReview?.text ?? 'A comfortable journey with helpful support and pleasant facilities.'}</p><small>{ship.topReview?.author ?? 'Guest traveller'}</small></aside>}
+  </section>
+}
+
+function FareChartModal({ ship, onClose }: { ship: Ship; onClose: () => void }) {
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
+  return <div className="fare-chart-overlay" role="dialog" aria-modal="true" aria-labelledby="fare-chart-title" onClick={onClose}>
+    <div className="fare-chart-modal" onClick={(event) => event.stopPropagation()}>
+      <div className="fare-chart-header"><div><p className="eyebrow">Fare guide</p><h2 id="fare-chart-title">{ship.name}</h2><p>Seat category prices</p></div><button type="button" className="fare-chart-close" onClick={onClose} aria-label="Close fare chart">×</button></div>
+      <div className="fare-chart-table" role="table" aria-label={`${ship.name} fare chart`}><div className="fare-chart-row fare-chart-heading" role="row"><span role="columnheader">Category</span><span role="columnheader">One way</span><span role="columnheader">Round trip</span></div>{ship.rooms.map((room) => <div className="fare-chart-row" role="row" key={room.id}><span role="cell"><b>{room.name}</b><small>{room.note}</small></span><strong role="cell">{money(room.oneWayPrice)}</strong><strong role="cell">{money(room.roundTripPrice)}</strong></div>)}</div>
+    </div>
+  </div>
+}
+
+function ShipTabModal({ ship, tab, onClose }: { ship: Ship; tab: ShipTabModalKind; onClose: () => void }) {
+  const [selectedPeriod, setSelectedPeriod] = useState(periods[0].value)
+  const scheduleShip = {
+    name: ship.name,
+    image: ship.image,
+    description: ship.description,
+    schedules: ship.schedules.filter((schedule) => schedule.date.startsWith(selectedPeriod)),
+    rooms: ship.rooms.map((room) => ({ id: room.id, name: room.name, oneWayPrice: money(room.oneWayPrice), roundTripPrice: money(room.roundTripPrice), note: room.note })),
+    periods,
+    selectedPeriod,
+  }
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
+  if (tab === 'schedule') {
+    return <ShipDetailsModal
+      ship={scheduleShip}
+      isOpen
+      initialTab="Ship schedule"
+      onClose={onClose}
+      onChoose={() => undefined}
+      onPeriodChange={setSelectedPeriod}
+    />
+  }
+
+  return <div className="fare-chart-overlay" role="dialog" aria-modal="true" aria-labelledby="ship-tab-modal-title" onClick={onClose}>
+    <div className="fare-chart-modal ship-tab-modal" onClick={(event) => event.stopPropagation()}>
+      <div className="fare-chart-header"><div><p className="eyebrow">Seat categories</p><h2 id="ship-tab-modal-title">{ship.name}</h2><p>Available seating on this ship</p></div><button type="button" className="fare-chart-close" onClick={onClose} aria-label="Close ship information">×</button></div>
+      <div className="ship-category-list">{ship.rooms.map((room) => <div className="ship-category-item" key={room.id}><span><b>{room.name}</b><small>{room.note}</small></span><strong>{money(room.oneWayPrice)} one way</strong></div>)}</div>
+    </div>
+  </div>
 }
 
 function ModernDatePicker({ label, value, onChange, min, max, optional, helper, compact }: { label: string; value: string; onChange: (value: string) => void; min?: string; max?: string; optional?: boolean; helper: string; compact?: boolean }) {
@@ -221,6 +476,8 @@ export function BookingPage({ initialShipSlug }: { initialShipSlug?: string }) {
   const [terms, setTerms] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [showSeatMap, setShowSeatMap] = useState(false)
+  const [showFareChart, setShowFareChart] = useState(false)
+  const [shipTabModal, setShipTabModal] = useState<ShipTabModalKind | null>(null)
   const [selectedSeatCategory, setSelectedSeatCategory] = useState<string | null>(null)
   const [showAll, setShowAll] = useState(false)
   const [showAllRooms, setShowAllRooms] = useState(false)
@@ -255,16 +512,15 @@ export function BookingPage({ initialShipSlug }: { initialShipSlug?: string }) {
   if (submitted) return <main className="min-h-screen bg-[#f5f8ff] px-5 py-10 text-[#101828]"><div className="mx-auto max-w-7xl px-5 pb-8 sm:px-10 lg:px-16"><div className="flex items-center justify-between gap-3 text-sm font-bold text-[#8b9ab2]"><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">1</span><span className="hidden sm:inline">Choose cruise</span></div><div className="h-px flex-1 bg-[#1464ff]" /><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">2</span><span className="hidden sm:inline">Booking your journey</span></div><div className="h-px flex-1 bg-[#1464ff]" /><div className="flex items-center gap-2 text-[#1464ff]"><span className="flex size-10 items-center justify-center rounded-full bg-[#1464ff] text-white">3</span><span className="hidden sm:inline">Confirm booking</span></div></div></div><div className="mx-auto max-w-7xl"><section className="flex min-h-[70vh] items-center justify-center"><div className="w-full rounded-[32px] bg-white p-8 text-center shadow-[0_24px_80px_rgba(13,97,255,.12)] sm:p-16"><div className="mx-auto mb-7 flex size-20 items-center justify-center rounded-full bg-[#e7f0ff] text-[#0d61ff]"><Check size={36} /></div><p className="mb-3 text-sm font-bold uppercase tracking-[.18em] text-[#0d61ff]">03 / Confirm booking</p><h1 className="mb-4 text-4xl font-semibold tracking-[-.04em]">Your journey is on its way.</h1><p className="mx-auto max-w-md leading-7 text-slate-500">Your booking request has been received successfully. Our team will contact you as soon as possible to confirm availability and complete your booking.</p><div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row"><button className="primary-button" onClick={() => setSubmitted(false)}>Back to booking</button><button type="button" className="summary-download confirmation-download" onClick={downloadSummary}><Download size={16} /> Download booking summary PDF</button></div><ExclusiveOffers /></div></section></div></main>
 
   {showSeatMap && <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#071b46]/45 p-5" role="dialog" aria-modal="true" aria-labelledby="seat-map-title" onClick={() => setShowSeatMap(false)}><div className="w-full max-w-md rounded-[28px] bg-white p-6 shadow-2xl" onClick={(event) => event.stopPropagation()}><div className="mb-5 flex items-start justify-between"><div><p className="eyebrow">Seat preview</p><h2 id="seat-map-title" className="text-2xl font-semibold">{selectedSeatCategory ? `${selectedSeatCategory} seating` : `${ship.name} layout`}</h2></div><button type="button" onClick={() => setShowSeatMap(false)} className="flex size-9 items-center justify-center rounded-full bg-slate-100 text-xl text-slate-500" aria-label="Close seat map">×</button></div><img src="/seat-category-preview.png" alt={`${selectedSeatCategory ?? ship.name} seating preview`} className="mb-4 h-40 w-full rounded-2xl object-cover" /><div className="rounded-2xl bg-[#f5f8ff] p-5"><div className="mx-auto mb-5 w-28 rounded-b-3xl rounded-t-xl bg-[#d8e7ff] px-3 py-2 text-center text-[10px] font-bold uppercase tracking-wider text-[#0d61ff]">Bow</div><div className="grid grid-cols-4 gap-2">{Array.from({ length: 20 }, (_, index) => <span key={index} className={`flex aspect-square items-center justify-center rounded-lg border text-[10px] font-bold ${index % 5 === 0 ? 'border-[#b9c9e8] bg-white text-slate-400' : 'border-[#9dbdff] bg-[#e6efff] text-[#0d61ff]'}`}>{index % 5 === 0 ? '—' : index + 1}</span>)}</div><div className="mx-auto mt-5 w-28 rounded-t-3xl rounded-b-xl bg-[#d8e7ff] px-3 py-2 text-center text-[10px] font-bold uppercase tracking-wider text-[#0d61ff]">Stern</div></div><div className="mt-5 flex items-center gap-4 text-xs text-slate-500"><span className="flex items-center gap-2"><i className="size-3 rounded bg-[#e6efff]" /> Available</span><span className="flex items-center gap-2"><i className="size-3 rounded bg-white ring-1 ring-[#b9c9e8]" /> Reserved</span></div></div></div>}
-
   return <main className="min-h-screen overflow-hidden bg-[#f6f9ff] text-[#101828]">
-    <HeroBanner />
-    <BookingStepper currentStep={shipRoute ? 1 : step} shipRoute={shipRoute} />
+    {!shipRoute && step === 1 && <HeroBanner />}
+    <BookingStepper currentStep={step} shipRoute={shipRoute} />
     <div className="relative mx-auto max-w-7xl px-5 pb-20 pt-10 sm:px-10 lg:px-16"><form onSubmit={submit} className="space-y-10">
-      {shipRoute && <SelectedShipBanner ship={ship} />}
+      {shipId && (shipRoute || step === 2) && <div className="ship-heading-section"><ShipHeader ship={ship} onBack={() => router.back()} onViewFares={() => setShowFareChart(true)} /><ShipGallery ship={ship} /><ShipTabs onOpenModal={setShipTabModal} /><ShipAbout ship={ship} /></div>}
       {!shipRoute && step === 1 && <ShipSelection ships={ships} selectedShipId={shipId} onSelect={chooseShip} onDetails={(selected, trigger) => { detailsTriggerRef.current = trigger; setDetailsInitialTab('Overview'); setDetailsShip(selected) }} onSchedule={(selected, trigger) => { detailsTriggerRef.current = trigger; setDetailsInitialTab('Ship schedule'); setDetailsShip(selected) }} onContinue={continueWithSelectedShip} />}
 
       {shipId && (shipRoute || step === 2) && <>
-      {showDetails &&       <section className="grid gap-5 lg:grid-cols-[1.15fr_.85fr]"><div className="panel"><div className="panel-heading"><div><p className="eyebrow">02 / The sailing</p><h2 className="flex items-center gap-2 text-2xl font-semibold"><CalendarDays className="h-6 w-6 text-[#0d61ff]" aria-hidden="true" />Ship schedule</h2><MonthDropdown value={period} name="schedule-period" onChange={(value) => { setPeriod(value); setDepartureDate(''); setReturnDate(''); setShowAll(false) }} /><p className="mt-3 text-sm text-slate-500">{periods.find((item) => item.value === period)?.label} sailings</p></div><span className="schedule-ship-name rounded-full bg-[#edf4ff] px-3 py-1 text-xs font-semibold text-[#0d61ff]">{ship.name}</span></div>{schedules.length ? <div className="overflow-hidden rounded-2xl border border-slate-100"><div className="grid grid-cols-3 bg-[#f7f9fd] px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-500"><span>Date</span><span>Departure (Cox&apos;s Bazar)</span><span>Return (Saint Martin)</span></div><div className="divide-y divide-slate-100">{(showAll ? schedules : schedules.slice(0, 3)).map((schedule) => <div key={schedule.id} className="grid grid-cols-3 items-center gap-3 px-4 py-4 text-sm"><span className="font-semibold text-slate-800">{new Date(`${schedule.date}T12:00:00`).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</span><span className="font-medium text-slate-700">{schedule.departure}</span><span className="font-medium text-slate-700">{schedule.arrival}</span></div>)}</div></div> : <p className="p-6 text-sm text-slate-500">No sailings are available for {periods.find((item) => item.value === period)?.label}.</p>}{schedules.length > 3 && <button type="button" onClick={() => setShowAll(!showAll)} className="mt-2 flex items-center gap-1 text-sm font-semibold text-[#0d61ff]">{showAll ? 'Show less' : 'Show more'} <ChevronDown className={showAll ? 'rotate-180' : ''} size={16} /></button>}</div><div className="panel"><div className="panel-heading"><div><p className="eyebrow">03 / Find your comfort</p><div><h2 className="text-2xl font-semibold">Room & seat pricing</h2><button type="button" onClick={() => setShowSeatMap(true)} className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#cfe0ff] bg-[#f5f9ff] px-3.5 py-2 text-xs font-bold text-[#0d61ff] transition hover:border-[#0d61ff] hover:bg-[#eaf2ff]"><Ship size={14} /> View seat map</button></div><span className="text-xs font-medium text-slate-400">Per passenger</span></div></div><div className="overflow-hidden rounded-2xl border border-slate-100"><div className="grid grid-cols-3 bg-[#f7f9fd] px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400"><span>Category</span><span>One way</span><span>Round trip</span><span>Images</span></div>{(showAllRooms ? ship.rooms : ship.rooms.slice(0, 5)).map((room) => <div key={room.id} className="grid grid-cols-3 items-center border-t border-slate-100 px-4 py-4 text-sm"><div><p className="font-semibold">{room.name}</p><p className="text-xs text-slate-400">{room.note}</p></div><span>{money(room.oneWayPrice)}</span><span className="font-semibold text-[#0d61ff]">{money(room.roundTripPrice)}<button type="button" aria-label={`View ${room.name} seat image`} onClick={() => { setSelectedSeatCategory(room.name); setShowSeatMap(true) }} className="view-seat-image">View</button></span></div>)}</div><button type="button" className="pricing-toggle mb-3" onClick={() => setShowAllRooms((current) => !current)}>{showAllRooms ? 'Show less' : 'Show more'}</button><div className="mt-5 flex gap-2 rounded-2xl bg-[#fff8e8] p-4 text-xs leading-5 text-[#88631a]"><CircleHelp className="mt-0.5 shrink-0" size={15} /><span><b>Child Policy:</b> Ages 1–5 do not require a ticket.</span></div></div></section>}
+      {showDetails &&       <section id="schedule" className="grid gap-5 lg:grid-cols-[1.15fr_.85fr]"><div className="panel"><div className="panel-heading"><div><p className="eyebrow">02 / The sailing</p><h2 className="flex items-center gap-2 text-2xl font-semibold"><CalendarDays className="h-6 w-6 text-[#0d61ff]" aria-hidden="true" />Ship schedule</h2><MonthDropdown value={period} name="schedule-period" onChange={(value) => { setPeriod(value); setDepartureDate(''); setReturnDate(''); setShowAll(false) }} /><p className="mt-3 text-sm text-slate-500">{periods.find((item) => item.value === period)?.label} sailings</p></div><span className="schedule-ship-name rounded-full bg-[#edf4ff] px-3 py-1 text-xs font-semibold text-[#0d61ff]">{ship.name}</span></div>{schedules.length ? <div className="overflow-hidden rounded-2xl border border-slate-100"><div className="grid grid-cols-3 bg-[#f7f9fd] px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-500"><span>Date</span><span>Departure (Cox&apos;s Bazar)</span><span>Return (Saint Martin)</span></div><div className="divide-y divide-slate-100">{(showAll ? schedules : schedules.slice(0, 3)).map((schedule) => <div key={schedule.id} className="grid grid-cols-3 items-center gap-3 px-4 py-4 text-sm"><span className="font-semibold text-slate-800">{new Date(`${schedule.date}T12:00:00`).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</span><span className="font-medium text-slate-700">{schedule.departure}</span><span className="font-medium text-slate-700">{schedule.arrival}</span></div>)}</div></div> : <p className="p-6 text-sm text-slate-500">No sailings are available for {periods.find((item) => item.value === period)?.label}.</p>}{schedules.length > 3 && <button type="button" onClick={() => setShowAll(!showAll)} className="mt-2 flex items-center gap-1 text-sm font-semibold text-[#0d61ff]">{showAll ? 'Show less' : 'Show more'} <ChevronDown className={showAll ? 'rotate-180' : ''} size={16} /></button>}</div><div id="seat-categories" className="panel"><div className="panel-heading"><div><p className="eyebrow">03 / Find your comfort</p><div><h2 className="text-2xl font-semibold">Room & seat pricing</h2><button type="button" onClick={() => setShowSeatMap(true)} className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#cfe0ff] bg-[#f5f9ff] px-3.5 py-2 text-xs font-bold text-[#0d61ff] transition hover:border-[#0d61ff] hover:bg-[#eaf2ff]"><Ship size={14} /> View seat map</button></div><span className="text-xs font-medium text-slate-400">Per passenger</span></div></div><div className="overflow-hidden rounded-2xl border border-slate-100"><div className="grid grid-cols-3 bg-[#f7f9fd] px-4 py-3 text-[11px] font-bold uppercase tracking-wider text-slate-400"><span>Category</span><span>One way</span><span>Round trip</span><span>Images</span></div>{(showAllRooms ? ship.rooms : ship.rooms.slice(0, 5)).map((room) => <div key={room.id} className="grid grid-cols-3 items-center border-t border-slate-100 px-4 py-4 text-sm"><div><p className="font-semibold">{room.name}</p><p className="text-xs text-slate-400">{room.note}</p></div><span>{money(room.oneWayPrice)}</span><span className="font-semibold text-[#0d61ff]">{money(room.roundTripPrice)}<button type="button" aria-label={`View ${room.name} seat image`} onClick={() => { setSelectedSeatCategory(room.name); setShowSeatMap(true) }} className="view-seat-image">View</button></span></div>)}</div><button type="button" className="pricing-toggle mb-3" onClick={() => setShowAllRooms((current) => !current)}>{showAllRooms ? 'Show less' : 'Show more'}</button><div className="mt-5 flex gap-2 rounded-2xl bg-[#fff8e8] p-4 text-xs leading-5 text-[#88631a]"><CircleHelp className="mt-0.5 shrink-0" size={15} /><span><b>Child Policy:</b> Ages 1–5 do not require a ticket.</span></div></div></section>}
 
 
       <section ref={bookingStepRef} className="panel"><div className="mb-8 flex flex-wrap items-start justify-between gap-4"><div><p className="eyebrow">{shipRoute ? '01 / Book your journey' : '02 / Book your journey'}</p>      <h2 className="text-3xl font-semibold tracking-tight">Book your journey.</h2><p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Choose your travel period, select your sailing dates, and provide passenger details to submit your cruise booking request.</p></div><div className="flex items-center gap-3">{!shipRoute && <button type="button" onClick={() => setStep(1)} className="rounded-full border border-[#cfe0ff] bg-white px-4 py-2.5 text-sm font-bold text-[#0d61ff] transition hover:border-[#0d61ff] hover:bg-[#eaf2ff]">Back to ship</button>}</div></div><div className="grid gap-4 md:grid-cols-3"><MonthDropdown value={period} onChange={(value) => { setPeriod(value); setDepartureDate(''); setReturnDate('') }} /><ModernDatePicker label="Departure date" value={departureDate} onChange={setDepartureDate} min={`${period}-01`} helper={schedules.find((item) => item.date === departureDate)?.departure || 'No sailing listed for this date'} />      <ModernDatePicker label="Return date" value={returnDate} onChange={setReturnDate} min={departureDate || `${period}-01`} helper="Return sailing date" /></div></section>
@@ -275,6 +531,8 @@ export function BookingPage({ initialShipSlug }: { initialShipSlug?: string }) {
       </>}
     </form></div>
     {detailsShip && <ShipDetailsModal ship={{ name: detailsShip.name, image: detailsShip.image, description: detailsShip.description, schedules: detailsShip.schedules.filter((schedule) => schedule.date.startsWith(period)), rooms: detailsShip.rooms.map((room) => ({ id: room.id, name: room.name, oneWayPrice: money(room.oneWayPrice), roundTripPrice: money(room.roundTripPrice), note: room.note })), periods, selectedPeriod: period }} isOpen={Boolean(detailsShip)} initialTab={detailsInitialTab} onClose={() => setDetailsShip(null)} onChoose={() => chooseShip(detailsShip.id)} onPeriodChange={(value) => { setPeriod(value); setDepartureDate(''); setReturnDate('') }} returnFocusRef={detailsTriggerRef} />}
+    {showFareChart && <FareChartModal ship={ship} onClose={() => setShowFareChart(false)} />}
+    {shipTabModal && <ShipTabModal ship={ship} tab={shipTabModal} onClose={() => setShipTabModal(null)} />}
   </main>
 }
 

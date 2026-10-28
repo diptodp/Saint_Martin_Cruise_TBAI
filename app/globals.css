@@ -164,6 +164,7 @@ button { cursor: pointer; }
 @keyframes ship-details-scale-in { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
 .trust-section { margin: 52px -16px 0; background: url('/Right.png') center / cover no-repeat; padding: 32px 16px; }
 .trust-section ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin: 0; padding: 0; list-style: none; }
+.trust-indicators { display: none; }
 .trust-card { position: relative; overflow: hidden; min-width: 0; border: 1px solid #e6edf8; border-radius: 28px; background: #fff; padding: 32px; box-shadow: 0 8px 30px rgba(31,95,224,.06); text-align: left; transition: transform .2s ease, box-shadow .2s ease; }
 .trust-card:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(31,95,224,.12); }
 .trust-card-dots { position: absolute; right: -8px; bottom: -8px; width: 90px; height: 90px; pointer-events: none; background-image: radial-gradient(circle, rgba(191,212,246,.4) 1.2px, transparent 1.2px); background-size: 11px 11px; mask-image: radial-gradient(ellipse at bottom right, #000 0%, transparent 76%); -webkit-mask-image: radial-gradient(ellipse at bottom right, #000 0%, transparent 76%); }
@@ -177,6 +178,15 @@ button { cursor: pointer; }
 .trust-card h3 { position: relative; z-index: 1; margin: 40px 0 0; color: #0a1224; font-size: 21px; font-weight: 700; letter-spacing: -.01em; }
 .trust-card p { position: relative; z-index: 1; max-width: 300px; margin: 10px 0 0; color: #5b6b87; font-size: 16px; line-height: 1.5; }
 @media (prefers-reduced-motion: reduce) { .trust-card { transition: none; }.trust-card:hover { transform: none; } }
+@media (max-width: 1023px) {
+  .trust-scroller { display: flex !important; flex-wrap: nowrap; align-items: stretch; gap: 16px; overflow-x: auto; overflow-y: hidden; padding: 0 16px 12px !important; scroll-padding-inline: 16px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .trust-scroller::-webkit-scrollbar { display: none; }
+  .trust-card { flex: 0 0 85%; min-width: 280px; align-self: stretch; scroll-snap-align: start; }
+  .trust-indicators { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; }
+  .trust-indicators button { width: 8px; height: 8px; border: 0; border-radius: 999px; background: #cbd7ee; padding: 0; }
+  .trust-indicators button.active { width: 22px; background: #0d65ff; }
+  .trust-scroller:focus-visible { outline: 3px solid rgba(13, 97, 255, .28); outline-offset: -3px; }
+}
 @media (max-width: 767px) {
   .selected-ship-banner { grid-template-columns: 1fr; gap: 16px; padding: 12px; }
   .selected-ship-banner-image { min-height: 150px; }
@@ -192,14 +202,13 @@ button { cursor: pointer; }
   .ship-price-area > div > span { font-size: 13px; }
   .ship-selection-footer { align-items: stretch; flex-direction: column; }
   .ship-selection-footer .primary-button { width: 100%; min-height: 56px; font-size: 16px; }
-  .trust-section ul { grid-template-columns: 1fr; gap: 16px; }
   .trust-card { padding: 24px; }
-  .trust-icon-tile { width: 56px; height: 56px; flex-basis: 56px; border-radius: 16px; }
-  .trust-icon-tile svg { width: 28px; height: 28px; }
-  .trust-keyword-wrap strong, .trust-keyword-wrap span { font-size: 42px; }
+  .trust-icon-tile { width: 60px; height: 60px; flex-basis: 60px; border-radius: 17px; }
+  .trust-icon-tile svg { width: 30px; height: 30px; }
+  .trust-keyword-wrap strong, .trust-keyword-wrap span { font-size: 48px; }
   .trust-keyword-wrap span { height: 17px; }
-  .trust-card h3 { margin-top: 30px; font-size: 20px; }
-  .trust-card p { font-size: 15px; }
+  .trust-card h3 { margin-top: 30px; font-size: 22px; }
+  .trust-card p { font-size: 17px; }
   .ship-details-overlay { padding: 20px 10px; }
   .ship-details-modal { width: 100%; padding: 20px; }
   .ship-details-hero { height: 220px; margin-top: 20px; }
@@ -215,6 +224,7 @@ button { cursor: pointer; }
   .ship-details-choose { min-height: 64px; font-size: 17px; }
 }
 @media (max-width: 1023px) and (min-width: 768px) {
+  .trust-card { flex-basis: 48%; }
   .booking-stepper { padding: 22px 18px; }
   .booking-step-label { font-size: 18px; }
   .booking-step-item { gap: 10px; }
@@ -259,6 +269,152 @@ button { cursor: pointer; }
   .summary { padding: 22px; }
   .ship-details-modal { width: min(760px, 92vw); padding: 24px; }
   .ship-details-hero { height: 250px; }
+}
+@media (max-width: 640px) {
+  .trust-card { padding: 20px; }
+  .trust-icon-tile { width: 56px; height: 56px; flex-basis: 56px; }
+  .trust-keyword-wrap strong, .trust-keyword-wrap span { font-size: 40px; }
+  .trust-card h3 { font-size: 20px; }
+  .trust-card p { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trust-scroller { scroll-behavior: auto; }
+}
+.ship-header { position: relative; }
+.ship-mobile-app-bar, .ship-mobile-title-block, .ship-mobile-gallery-wrap { display: none; }
+.ship-title-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.ship-title-copy { display: flex; min-width: 0; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ship-title-copy h1 { margin: 0; color: #0f1b3d; font-size: 36px; font-weight: 800; letter-spacing: -.045em; line-height: 1.1; }
+.ship-verified { display: inline-flex; width: 28px; height: 28px; flex: 0 0 28px; align-items: center; justify-content: center; border-radius: 50%; background: #22a559; color: #fff; }
+.ship-badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.ship-badge-premium { background: #fff1d6; color: #744f12; font-size: 14px; }
+.ship-badge-choice { background: #e8f7ee; color: #17803d; }
+.ship-header-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 12px; }
+.ship-heart { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border: 0; border-radius: 50%; background: transparent; color: #0f1b3d; }
+.ship-heart:hover, .ship-heart:focus-visible { background: #f1f4fa; }
+.ship-heart.saved { color: #e44a55; }
+.ship-share-button { display: inline-flex; height: 44px; align-items: center; gap: 8px; border: 0; border-radius: 999px; background: #f1f4fa; padding: 0 20px; color: #0f1b3d; font-size: 14px; font-weight: 700; }
+.ship-share-button:hover, .ship-share-button:focus-visible { background: #e5ebf5; }
+.ship-fares-button { min-height: 44px; padding: 0 24px; font-size: 14px; }
+.ship-location { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; color: #4b5877; font-size: 15px; }
+.ship-location b { color: #99a6ba; font-size: 12px; }
+.ship-share-toast { position: absolute; top: 52px; right: 132px; z-index: 3; border-radius: 10px; background: #0f1b3d; padding: 8px 12px; color: #fff; font-size: 12px; font-weight: 700; }
+.ship-gallery { display: grid; grid-template: repeat(2, 1fr) / 2fr 1.1fr 1fr; gap: 10px; height: 340px; margin-top: 24px; overflow: hidden; border-radius: 24px; }
+.ship-gallery-tile { position: relative; min-width: 0; min-height: 0; overflow: hidden; border: 0; border-radius: 20px; background: #dce5f3; padding: 0; cursor: pointer; }
+.ship-gallery-tile-1 { grid-row: span 2; }
+.ship-gallery-tile img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
+.ship-gallery-tile:hover img, .ship-gallery-tile:focus-visible img { transform: scale(1.03); }
+.ship-gallery-play { position: absolute; top: 50%; left: 50%; display: grid; width: 56px; height: 56px; place-items: center; transform: translate(-50%, -50%); border: 1px solid rgba(255,255,255,.85); border-radius: 50%; background: rgba(0,0,0,.35); color: #fff; backdrop-filter: blur(5px); }
+.ship-gallery-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(15,27,61,.45); color: #fff; font-size: 16px; font-weight: 700; backdrop-filter: blur(2px); }
+.ship-gallery-mobile-button { display: none; }
+.ship-tabs-wrap { position: sticky; z-index: 10; top: 12px; margin-top: 32px; background: transparent; }
+.ship-tabs { display: flex; width: 100%; height: 72px; flex-wrap: nowrap; align-items: center; gap: 8px; overflow-x: auto; overflow-y: hidden; border-radius: 999px; background: #fff; padding: 8px 12px; box-shadow: 0 8px 24px rgba(15,27,61,.08), 0 1px 3px rgba(15,27,61,.06); scrollbar-width: none; }
+.ship-tabs::-webkit-scrollbar { display: none; }
+.ship-tabs a { display: inline-flex; box-sizing: border-box; width: auto; min-width: 0; height: 52px; flex: 0 0 auto; align-items: center; justify-content: center; margin: 0; border-radius: 999px; background: transparent; padding: 0 32px; color: #0f1b3d; font-size: 16px; font-weight: 600; line-height: 1; text-align: center; text-decoration: none; white-space: nowrap; scroll-snap-align: center; }
+.ship-tabs a:hover, .ship-tabs a:focus-visible { background: #f1f4fa; }
+.ship-tabs a.active { background: #eaf1ff; color: #1f6bff; }
+.ship-about-layout { display: grid; grid-template-columns: minmax(0, 7fr) minmax(280px, 3fr); gap: 40px; margin-top: 32px; scroll-margin-top: 80px; }
+.ship-about-copy h2 { margin: 0; color: #0f1b3d; font-size: 30px; font-weight: 800; letter-spacing: -.04em; }
+.ship-about-copy p { display: -webkit-box; max-width: 850px; margin: 14px 0 0; overflow: hidden; color: #4b5877; font-size: 18px; line-height: 1.6; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
+.ship-about-copy p.expanded { display: block; }
+.ship-about-copy button { margin-top: 10px; border: 0; background: transparent; padding: 0; color: #0d65ff; font-size: 15px; font-weight: 800; }
+.ship-review-card { align-self: start; border: 1px solid #dce8ff; border-radius: 20px; background: #fff; padding: 24px; box-shadow: 0 12px 32px rgba(31,95,224,.08); }
+.ship-review-score { display: flex; align-items: center; gap: 10px; }
+.ship-review-score strong { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 13px; background: #1f6bff; color: #fff; font-size: 16px; }
+.ship-review-score span { display: flex; flex-direction: column; gap: 3px; color: #0f1b3d; font-size: 13px; }
+.ship-review-score small { color: #4b5877; font-size: 12px; }
+.ship-review-card h3 { margin: 22px 0 0; color: #0f1b3d; font-size: 18px; }
+.ship-review-card p { margin: 8px 0 0; color: #4b5877; font-size: 14px; line-height: 1.5; }
+.ship-review-card > small { display: block; margin-top: 10px; color: #7a89a4; font-size: 12px; }
+.ship-lightbox { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; background: rgba(7,18,43,.86); padding: 24px; }
+.ship-lightbox-content { position: relative; max-width: min(1000px, 94vw); max-height: 90vh; }
+.ship-lightbox-content img { display: block; max-width: 100%; max-height: 85vh; border-radius: 16px; object-fit: contain; }
+.ship-lightbox-close { position: absolute; z-index: 1; top: -50px; right: 0; display: grid; width: 40px; height: 40px; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #0f1b3d; }
+.ship-lightbox-counter { position: absolute; right: 12px; bottom: 12px; border-radius: 999px; background: rgba(15,27,61,.75); padding: 7px 11px; color: #fff; font-size: 12px; font-weight: 700; }
+.fare-chart-overlay { position: fixed; z-index: 80; inset: 0; display: flex; align-items: center; justify-content: center; overflow-y: auto; background: rgba(7,27,70,.45); padding: 24px; backdrop-filter: blur(4px); }
+.fare-chart-modal { width: min(680px, 100%); max-height: min(760px, 90vh); overflow-y: auto; border-radius: 24px; background: #fff; padding: 28px; box-shadow: 0 24px 80px rgba(15,27,61,.25); }
+.fare-chart-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.fare-chart-header h2 { margin: 4px 0 0; color: #0f1b3d; font-size: 25px; font-weight: 800; letter-spacing: -.03em; }
+.fare-chart-header p:last-child { margin: 6px 0 0; color: #6b7a99; font-size: 14px; }
+.fare-chart-close { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border: 0; border-radius: 50%; background: #f1f4fa; color: #0f1b3d; font-size: 27px; line-height: 1; }
+.fare-chart-close:hover, .fare-chart-close:focus-visible { background: #e5ebf5; outline: 3px solid rgba(13,97,255,.2); }
+.fare-chart-table { display: grid; gap: 8px; margin-top: 24px; }
+.fare-chart-row { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(90px, .75fr) minmax(100px, .85fr); align-items: center; gap: 16px; border: 1px solid #e4eaf2; border-radius: 14px; padding: 13px 16px; color: #4b5877; font-size: 14px; }
+.fare-chart-row span { min-width: 0; }
+.fare-chart-row span b, .fare-chart-row span small { display: block; }
+.fare-chart-row span b { color: #0f1b3d; font-weight: 800; }
+.fare-chart-row span small { margin-top: 4px; color: #7c89a6; font-size: 12px; }
+.fare-chart-row strong { color: #1f6bff; font-size: 15px; }
+.fare-chart-heading { border: 0; padding: 0 16px 3px; color: #6b7a99; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.ship-category-list { display: grid; gap: 8px; margin-top: 24px; }
+.ship-category-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; border: 1px solid #e4eaf2; border-radius: 14px; padding: 14px 16px; color: #1f6bff; font-size: 14px; }
+.ship-category-item span { min-width: 0; }
+.ship-category-item b, .ship-category-item small { display: block; }
+.ship-category-item b { color: #0f1b3d; font-weight: 800; }
+.ship-category-item small { margin-top: 4px; color: #7c89a6; font-size: 12px; }
+.ship-category-item strong { flex: 0 0 auto; font-size: 13px; white-space: nowrap; }
+@media (max-width: 1023px) {
+  .ship-gallery { height: 280px; }
+  .ship-about-layout { grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 640px) {
+  .ship-heading-section { display: flex; flex-direction: column; }
+  .ship-heading-section { width: calc(100% + 40px); max-width: none; margin-left: -20px; min-width: 0; }
+  .ship-header { display: contents; }
+  .ship-mobile-app-bar { position: sticky; top: 0; z-index: 30; display: flex; order: 1; height: calc(56px + env(safe-area-inset-top)); align-items: flex-end; justify-content: space-between; background: #fff; padding: env(safe-area-inset-top) 16px 0; }
+  .ship-mobile-back { display: inline-flex; height: 56px; align-items: center; gap: 5px; border: 0; background: transparent; padding: 0; color: #0f1b3d; font-size: 17px; font-weight: 700; }
+  .ship-mobile-app-actions { display: flex; align-items: center; gap: 4px; }
+  .ship-mobile-app-actions .ship-heart, .ship-mobile-icon-button { width: 40px; height: 40px; }
+  .ship-mobile-icon-button { display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 50%; background: transparent; color: #0f1b3d; }
+  .ship-title-row, .ship-header > .ship-location { display: none; }
+  .ship-mobile-title-block { display: block; order: 3; min-width: 0; padding: 24px; }
+  .ship-mobile-name { display: block; min-width: 0; }
+  .ship-mobile-name h1 { display: inline; margin: 0; color: #0f1b3d; font-size: 34px; font-weight: 800; letter-spacing: -.045em; line-height: 1.15; }
+  .ship-mobile-name .ship-verified { display: inline-flex; width: 28px; height: 28px; margin-left: 10px; vertical-align: middle; }
+  .ship-mobile-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .ship-mobile-badges .ship-badge { padding: 8px 14px; font-size: 15px; }
+  .ship-mobile-badges .ship-badge-premium { font-size: 16px; }
+  .ship-mobile-location { display: flex; align-items: flex-start; flex-wrap: wrap; gap: 7px; margin: 14px 0 0; color: #5b6b87; font-size: 16px; line-height: 1.4; }
+  .ship-mobile-location b { color: #99a6ba; }
+  .ship-mobile-actions { display: flex; align-items: center; gap: 12px; margin-top: 22px; }
+  .ship-mobile-actions .ship-heart { flex: 0 0 44px; }
+  .ship-mobile-actions .ship-share-button { height: 52px; padding: 0 22px; font-size: 17px; }
+  .ship-mobile-actions .ship-fares-button { min-height: 52px; padding: 0 26px; font-size: 16px; }
+  .ship-gallery { display: none; }
+  .ship-mobile-gallery-wrap { display: block; order: 2; margin-top: 0; }
+  .ship-mobile-gallery { position: relative; display: flex; width: 100%; max-width: 100%; min-width: 0; height: 270px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .ship-mobile-gallery::-webkit-scrollbar { display: none; }
+  .ship-mobile-slide { position: relative; display: block; width: 100%; min-width: 0; height: 270px; flex: 0 0 100%; overflow: hidden; border: 0; border-radius: 0; padding: 0; scroll-snap-align: start; background: #dce5f3; }
+  .ship-mobile-slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .ship-mobile-gallery .ship-gallery-mobile-button { position: absolute; right: 16px; bottom: 16px; display: inline-flex; max-width: calc(100% - 32px); align-items: center; gap: 6px; border: 0; border-radius: 999px; background: rgba(15,27,61,.55); padding: 8px 12px; color: #fff; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .ship-mobile-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 12px; }
+  .ship-mobile-pagination span { width: 22px; height: 4px; border-radius: 999px; background: #e3e8f2; }
+  .ship-mobile-pagination span.active { background: #0d65ff; }
+  .ship-tabs-wrap { order: 4; top: calc(56px + env(safe-area-inset-top) + 8px); margin: 28px 16px 0; }
+  .ship-tabs { height: 56px; gap: 8px; padding: 8px 12px; scroll-snap-type: x proximity; }
+  .ship-tabs a { height: 44px; padding: 0 32px; font-size: 17px; }
+  .ship-about-layout { order: 5; margin-top: 28px; padding: 0 24px; }
+  .ship-about-copy h2 { font-size: 30px; }
+  .ship-about-copy p { font-size: 19px; line-height: 1.65; -webkit-line-clamp: 6; }
+  .ship-review-card { margin-top: 0; }
+  .ship-share-toast { top: 60px; right: 16px; }
+  .fare-chart-overlay { align-items: flex-end; padding: 12px; }
+  .fare-chart-modal { max-height: 88vh; border-radius: 22px; padding: 20px; }
+  .fare-chart-header h2 { font-size: 20px; }
+  .fare-chart-row { grid-template-columns: minmax(0, 1.3fr) minmax(70px, .7fr) minmax(82px, .8fr); gap: 8px; padding: 11px 10px; font-size: 12px; }
+  .fare-chart-heading { padding-inline: 10px; font-size: 10px; }
+  .fare-chart-row strong { font-size: 13px; }
+}
+@media (max-width: 320px) {
+  .ship-mobile-name h1 { font-size: 28px; }
+  .ship-mobile-actions .ship-share-button, .ship-mobile-actions .ship-fares-button { height: 48px; min-height: 48px; padding-inline: 14px; font-size: 15px; }
+}
+@media (max-width: 339px) {
+  .ship-mobile-actions { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ship-gallery-tile img { transition: none; }
+  .ship-tabs a, .ship-gallery-tile img { scroll-behavior: auto; }
 }
 .field { display: flex; flex-direction: column; gap: 8px; color: #526177; font-size: 12px; font-weight: 700; }
 .field input, .field select { width: 100%; border: 1px solid #dfe6f0; border-radius: 12px; background: #fbfcfe; padding: 12px 13px; color: #172033; outline: none; transition: border-color .2s, box-shadow .2s; }
