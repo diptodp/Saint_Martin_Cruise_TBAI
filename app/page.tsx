@@ -324,6 +324,7 @@ type ShipTabModalKind = 'seat-categories' | 'schedule'
 function ShipTabs({ onOpenModal }: { onOpenModal: (tab: ShipTabModalKind) => void }) {
   const [activeTab, setActiveTab] = useState('overview')
   const tabRef = useRef<HTMLAnchorElement | null>(null)
+  const tabListRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const sections = shipTabs.map(([id]) => document.getElementById(id)).filter(Boolean) as HTMLElement[]
@@ -340,9 +341,15 @@ function ShipTabs({ onOpenModal }: { onOpenModal: (tab: ShipTabModalKind) => voi
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
-  useEffect(() => { tabRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }) }, [activeTab])
+  useEffect(() => {
+    const tab = tabRef.current
+    const tabList = tabListRef.current
+    if (!tab || !tabList) return
+    const targetLeft = tab.offsetLeft - (tabList.clientWidth - tab.offsetWidth) / 2
+    tabList.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' })
+  }, [activeTab])
 
-  return <nav className="ship-tabs-wrap" aria-label="Ship sections"><div className="ship-tabs" role="tablist">
+  return <nav className="ship-tabs-wrap" aria-label="Ship sections"><div ref={tabListRef} className="ship-tabs" role="tablist">
     {shipTabs.map(([id, label]) => <a key={id} href={`#${id}`} role="tab" ref={activeTab === id ? tabRef : undefined} aria-selected={activeTab === id} className={activeTab === id ? 'active' : ''} onClick={(event) => { event.preventDefault(); if (id === 'seat-categories' || id === 'schedule') onOpenModal(id); else activateTab(id) }}>{label}</a>)}
   </div></nav>
 }
